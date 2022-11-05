@@ -18,7 +18,9 @@ else
                </div>
                <div class="name">
                    <h5><a href="/produkt/@produkt.ProduktID">@produkt.Title</a></h5>
-                   <span>@produkt.ProduktArt</span>
+                   <span>@produkt.ProduktArt</span><br/>
+                    <button class="btn btn-outline-danger" @onclick="@(()=>
+                        EntfernenProduktAusWarenKorb(produkt.ProduktID,produkt.ProduktArtID))">Löschen</button>
                </div>
                <div class="warenkorb-produkt-preis">$@produkt.Preis</div>
            </div>
@@ -34,7 +36,17 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        if((await WarenKorbDienst.GeheZurWarenKorbProdukteAsync()).Count == 0)
+        await WarenKorbLaden();
+    }
+    private async Task EntfernenProduktAusWarenKorb(int produktID, int produktArtID)
+    {
+        await WarenKorbDienst.EntfernenProduktAusWarenKorbAsync(produktID, produktArtID);
+        await WarenKorbLaden();
+
+    }
+    private async Task WarenKorbLaden()
+    {
+        if ((await WarenKorbDienst.GeheZurWarenKorbProdukteAsync()).Count == 0)
         {
             nachricht = "Ihr Warenkorb ist leer.";
             warenKorbProdukte = new List<AntwortDesWarenKorbProduktes>();

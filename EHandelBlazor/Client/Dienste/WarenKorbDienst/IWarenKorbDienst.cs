@@ -6,6 +6,7 @@
         Task InWarenKorbLegen(WarenKorbArtikel warenKorbArtikel);
         Task<List<WarenKorbArtikel>> GeheZurWarenKorbArtikelAsync();
         Task<List<AntwortDesWarenKorbProduktes>> GeheZurWarenKorbProdukteAsync();
+        Task EntfernenProduktAusWarenKorbAsync(int produktID, int produktArtID);
 
 
     }

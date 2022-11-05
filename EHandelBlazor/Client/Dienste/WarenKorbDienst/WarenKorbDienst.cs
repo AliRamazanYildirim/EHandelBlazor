@@ -14,6 +14,22 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
         }
         public event Action BeiÄnderung;
 
+        public async Task EntfernenProduktAusWarenKorbAsync(int produktID, int produktArtID)
+        {
+            var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
+            if(warenKorb == null)
+            {
+                return;
+            }
+            var warenKorbArtikel = warenKorb.Find(a => a.ProduktID == produktID && a.ProduktArtID == produktArtID);
+            if(warenKorbArtikel != null)
+            {
+                warenKorb.Remove(warenKorbArtikel);
+                await _localStorageService.SetItemAsync("warenkorb", warenKorb);
+                BeiÄnderung.Invoke();
+            }
+        }
+
         public async Task<List<WarenKorbArtikel>> GeheZurWarenKorbArtikelAsync()
         {
             var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");

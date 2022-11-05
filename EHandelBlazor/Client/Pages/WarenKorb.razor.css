@@ -24,3 +24,10 @@ img:hover {
     font-weight:600;
     text-align:right;
 }
+.btn{
+    padding:2px;
+    font-size:15px;
+}
+.btn:hover{
+    text-decoration:underline;
+}
