@@ -31,6 +31,7 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
             }
             warenKorb.Add(warenKorbArtikel);
             await _localStorageService.SetItemAsync("warenkorb", warenKorb);
+            BeiÄnderung.Invoke();
         }
     }
 }

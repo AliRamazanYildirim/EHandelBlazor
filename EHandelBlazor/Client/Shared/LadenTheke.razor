@@ -1,8 +1,25 @@
-﻿<a href="theke" class="btn btn-danger">
+﻿@inject IWarenKorbDienst WarenKorbDienst
+@inject ISyncLocalStorageService LocalStorage
+@implements IDisposable
+
+
+<a href="theke" class="btn btn-warning">
     <i class="oi oi-cart"></i>
-    <span class="badge">0</span>
+    <span class="badge">@GeheZurWatenKorbArtikelTheke()</span>
 </a>
 
 @code {
-
+    private int GeheZurWatenKorbArtikelTheke()
+    {
+        var warenKorb = LocalStorage.GetItem<List<WarenKorbArtikel>>("warenkorb");
+        return warenKorb != null ? warenKorb.Count : 0;
+    }
+    protected override void OnInitialized()
+    {
+        WarenKorbDienst.BeiÄnderung += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        WarenKorbDienst.BeiÄnderung -= StateHasChanged;
+    }
 }
