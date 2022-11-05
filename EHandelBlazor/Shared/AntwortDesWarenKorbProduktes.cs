@@ -14,5 +14,6 @@ namespace EHandelBlazor.Shared
         public string ProduktArt { get; set; } = string.Empty;
         public string BildUrl { get; set; } = string.Empty;
         public decimal Preis { get; set; }
+        public int Menge { get; set; }
     }
 }

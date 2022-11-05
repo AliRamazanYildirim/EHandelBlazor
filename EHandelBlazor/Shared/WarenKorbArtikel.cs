@@ -10,5 +10,6 @@ namespace EHandelBlazor.Shared
     {
         public int ProduktID { get; set; }
         public int ProduktArtID { get; set; }
+        public int Menge { get; set; }
     }
 }
