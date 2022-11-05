@@ -1,5 +1,7 @@
 ﻿@page "/produkt/{id:int}"
 @inject IProduktDienst ProduktDienst
+@inject IWarenKorbDienst WarenKorbDienst
+
 
 @if (produkt == null)
 {
@@ -36,7 +38,10 @@ else
                 <h4 class="preis">
                     @GeheZurGewählteVariante().Preis €
                 </h4>
-            }  
+            }
+            <button class="btn btn-success" @onclick="InWarenKorbLegen">
+                <i class="oi oi-cart"></i>&nbsp;&nbsp;&nbsp;In Warenkorb Legen
+            </button>
         </div>
     </div>
 }
@@ -65,12 +70,22 @@ else
             }
 
         }
-        
+
     }
     private ProduktVariante GeheZurGewählteVariante()
     {
         var produktVariante = produkt.ProduktVarianten.FirstOrDefault(v => v.ProduktArtID == aktuelleArtID);
         return produktVariante;
 
+    }
+    private async Task InWarenKorbLegen()
+    {
+        var produktVariante = GeheZurGewählteVariante();
+        var warenKorbArtikel = new WarenKorbArtikel
+            {
+                ProduktID = produktVariante.ProduktID,
+                ProduktArtID = produktVariante.ProduktArtID
+            };
+        await WarenKorbDienst.InWarenKorbLegen(warenKorbArtikel);
     }
 }
