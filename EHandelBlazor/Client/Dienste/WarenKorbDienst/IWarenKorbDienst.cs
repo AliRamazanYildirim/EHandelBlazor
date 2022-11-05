@@ -7,7 +7,7 @@
         Task<List<WarenKorbArtikel>> GeheZurWarenKorbArtikelAsync();
         Task<List<AntwortDesWarenKorbProduktes>> GeheZurWarenKorbProdukteAsync();
         Task EntfernenProduktAusWarenKorbAsync(int produktID, int produktArtID);
-
+        Task MengeAktualisierenAsync(AntwortDesWarenKorbProduktes produkt);
 
     }
 }
