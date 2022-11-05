@@ -5,5 +5,8 @@
         event Action BeiÄnderung;
         Task InWarenKorbLegen(WarenKorbArtikel warenKorbArtikel);
         Task<List<WarenKorbArtikel>> GeheZurWarenKorbArtikelAsync();
+        Task<List<AntwortDesWarenKorbProduktes>> GeheZurWarenKorbProdukteAsync();
+
+
     }
 }
