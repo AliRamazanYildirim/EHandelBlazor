@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHandelBlazor.Server", "EHandelBlazor\Server\EHandelBlazor.Server.csproj", "{2D082FD7-1517-4FEF-99A5-CBDEAA07EAC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHandelBlazor.Server", "EHandelBlazor\Server\EHandelBlazor.Server.csproj", "{2D082FD7-1517-4FEF-99A5-CBDEAA07EAC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHandelBlazor.Client", "EHandelBlazor\Client\EHandelBlazor.Client.csproj", "{147BD3A2-3E8A-4F0F-8978-26EC12A02BE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHandelBlazor.Client", "EHandelBlazor\Client\EHandelBlazor.Client.csproj", "{147BD3A2-3E8A-4F0F-8978-26EC12A02BE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHandelBlazor.Shared", "EHandelBlazor\Shared\EHandelBlazor.Shared.csproj", "{6457333D-F0CF-4E76-A4FA-B2F73638D4D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHandelBlazor.Shared", "EHandelBlazor\Shared\EHandelBlazor.Shared.csproj", "{6457333D-F0CF-4E76-A4FA-B2F73638D4D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

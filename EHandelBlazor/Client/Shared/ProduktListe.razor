@@ -61,10 +61,10 @@ else
         }
         else if(produktVarianten.Count == 1)
         {
-            return $"${produktVarianten[0].Preis}";
+            return $"{produktVarianten[0].Preis}";
         }
         decimal minPreis = produktVarianten.Min(v => v.Preis);
-        return $"Beginnt ab ${minPreis}";
+        return $"Beginnt ab {minPreis} €";
 
     }
 }

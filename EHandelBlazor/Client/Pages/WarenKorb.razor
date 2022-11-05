@@ -1,0 +1,47 @@
+﻿@page "/warenkorb"
+@inject IWarenKorbDienst WarenKorbDienst
+
+<PageTitle>Einkaufswagen</PageTitle>
+<h3>Einkaufswagen</h3>
+@if (warenKorbProdukte == null || warenKorbProdukte.Count == 0)
+{
+    <span>@nachricht</span>
+}
+else
+{
+    <div>
+        @foreach (var produkt in warenKorbProdukte)
+       {
+           <div class="container">
+               <div class="image-wrapper">
+                   <img src="@produkt.BildUrl" class="img"/>
+               </div>
+               <div class="name">
+                   <h5><a href="/produkt/@produkt.ProduktID">@produkt.Title</a></h5>
+                   <span>@produkt.ProduktArt</span>
+               </div>
+               <div class="warenkorb-produkt-preis">$@produkt.Preis</div>
+           </div>
+       }
+        <div class="warenkorb-produkt-preis">
+            Gesamtpreis (@warenKorbProdukte.Count): @warenKorbProdukte.Sum(produkt => produkt.Preis) €
+        </div>
+    </div>
+}
+@code {
+    List<AntwortDesWarenKorbProduktes> warenKorbProdukte = null;
+    string nachricht = "Warenkorb wird geladen...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if((await WarenKorbDienst.GeheZurWarenKorbProdukteAsync()).Count == 0)
+        {
+            nachricht = "Ihr Warenkorb ist leer.";
+            warenKorbProdukte = new List<AntwortDesWarenKorbProduktes>();
+        }
+        else
+        {
+            warenKorbProdukte = await WarenKorbDienst.GeheZurWarenKorbProdukteAsync();
+        }
+    }
+}

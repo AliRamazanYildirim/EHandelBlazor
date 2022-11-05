@@ -23,7 +23,7 @@ else
                     @if (produkt.ProduktVarianten != null && produkt.ProduktVarianten.Count > 0)
                     {
                         <h5 class="preis">
-                            $@produkt.ProduktVarianten[0].Preis
+                            @produkt.ProduktVarianten[0].Preis €
                         </h5>
                     }
                 </div>
