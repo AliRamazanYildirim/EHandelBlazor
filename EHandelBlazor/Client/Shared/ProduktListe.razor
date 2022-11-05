@@ -1,0 +1,70 @@
+﻿@inject IProduktDienst ProduktDienst
+@implements IDisposable
+
+@if (ProduktDienst.Produkte == null || ProduktDienst.Produkte.Count == 0)
+{
+    <span>@ProduktDienst.Nachricht</span>
+}
+else
+{
+    <ul class="list-unstyled">
+        @foreach (var produkt in ProduktDienst.Produkte)
+        {
+            <li class="media my-3">
+                <div class="media-img-wrapper mr-2">
+                    <a href="/produkt/@produkt.ID">
+                        <img class="media-img" src="@produkt.BildUrl" alt="@produkt.Title" />
+                    </a>
+                </div>
+                <div class="media-body">
+                    <a href="/produkt/@produkt.ID">
+                        <h4 class="mb-0">@produkt.Title</h4>
+                    </a>
+                    <p>@produkt.Bezeichnung</p>
+                    <h5 class="preis">
+                        @GeheZumPreisText(produkt) €
+                    </h5>
+                </div>
+            </li>
+        }
+    </ul>
+    for (var i = 1; i <= ProduktDienst.SeitenZahl; i++)
+    {
+        <a class="btn @(i==ProduktDienst.AktuelleSeite ? "btn-info" : "btn-outline-info")
+        seiten-auswahl" href="/suche/@ProduktDienst.LetzterSuchText/@i">@i</a>
+    }
+}
+
+
+@code {
+    #region Mit Async Methode
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    //await ProduktDienst.GeheZurProdukteAsync();
+    //    ProduktDienst.ProdukteGeändert += StateHasChanged;
+    //}
+    #endregion
+    protected override void OnInitialized()
+    {
+        ProduktDienst.ProdukteGeändert += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        ProduktDienst.ProdukteGeändert -= StateHasChanged;
+    }
+    private string GeheZumPreisText(Produkt produkt)
+    {
+        var produktVarianten = produkt.ProduktVarianten;
+        if(produktVarianten.Count == 0)
+        {
+            return string.Empty;
+        }
+        else if(produktVarianten.Count == 1)
+        {
+            return $"${produktVarianten[0].Preis}";
+        }
+        decimal minPreis = produktVarianten.Min(v => v.Preis);
+        return $"Beginnt ab ${minPreis}";
+
+    }
+}

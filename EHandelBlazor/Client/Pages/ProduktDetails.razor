@@ -1,0 +1,76 @@
+﻿@page "/produkt/{id:int}"
+@inject IProduktDienst ProduktDienst
+
+@if (produkt == null)
+{
+    <span>@nachricht</span>
+}
+else
+{
+    <div class="media">
+        <div class="media-img-wrapper mr-2">
+            <img class="media-img" src="@produkt.BildUrl" alt="@produkt.Title" />
+        </div>
+        <div class="media-body">
+            <h2 class="mb-0">@produkt.Title</h2>
+            <p>@produkt.Bezeichnung</p>
+            @if(produkt.ProduktVarianten != null && produkt.ProduktVarianten.Count > 1)
+            {
+                <div class="mb-3">
+                    <select class="from-select" @bind="aktuelleArtID">
+                        @foreach (var variante in produkt.ProduktVarianten)
+                       {
+                           <option value="@variante.ProduktArtID">@variante.ProduktArt.Name</option>
+                       }
+                    </select>
+                </div>
+            }
+            @if(GeheZurGewählteVariante() != null)
+            {
+                @if(GeheZurGewählteVariante().OriginalPreis > GeheZurGewählteVariante().Preis)
+                {
+                    <h6 class="text-muted original-preis">
+                        @GeheZurGewählteVariante().OriginalPreis €
+                    </h6>
+                }
+                <h4 class="preis">
+                    @GeheZurGewählteVariante().Preis €
+                </h4>
+            }  
+        </div>
+    </div>
+}
+@code {
+    private Produkt? produkt = null;
+    private string nachricht = string.Empty;
+    private int aktuelleArtID = 1;
+
+    [Parameter]
+    public int ID { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        nachricht = "Das Produkt wird geladen...";
+        var resultat = await ProduktDienst.GeheZumProduktAsync(ID);
+        if(!resultat.Erfolg)
+        {
+            nachricht = resultat.Nachricht;
+        }
+        else
+        {
+            produkt = resultat.Daten;
+            if(produkt.ProduktVarianten.Count > 0)
+            {
+                aktuelleArtID = produkt.ProduktVarianten[0].ProduktArtID;
+            }
+
+        }
+        
+    }
+    private ProduktVariante GeheZurGewählteVariante()
+    {
+        var produktVariante = produkt.ProduktVarianten.FirstOrDefault(v => v.ProduktArtID == aktuelleArtID);
+        return produktVariante;
+
+    }
+}

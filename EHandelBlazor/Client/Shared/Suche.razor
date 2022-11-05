@@ -1,0 +1,54 @@
+﻿@inject NavigationManager NavigationManager
+@inject IProduktDienst ProduktDienst
+<div class="input-group">
+    <input @bind-value="sucheText"
+           @bind-value:event="oninput"
+           type="suche"
+           list="produkte"
+           @onkeyup="SucheHandle"
+           class="form-control"
+           placeholder="Wird gesucht..."
+           @ref="suchEingabe" />
+    <datalist id="produkte">
+        @foreach (var anregung in anregungen)
+        {
+            <option>@anregung</option>
+        }
+    </datalist>
+    <div class="input-group-append">
+        <button class="btn btn-primary" @onclick="SucheProdukte">
+            <span class="oi oi-magnifying-glass"></span>
+        </button>
+    </div>
+</div>
+
+@code {
+    private string sucheText = string.Empty;
+    private List<string> anregungen = new List<string>();
+    protected ElementReference suchEingabe;
+
+    protected override async Task OnAfterRenderAsync(bool erstesRender)
+    {
+        if (erstesRender)
+        {
+            await suchEingabe.FocusAsync();
+        }
+    }
+
+    public void SucheProdukte()
+    {
+        NavigationManager.NavigateTo($"suche/{sucheText}/1");
+    }
+
+    public async Task SucheHandle(KeyboardEventArgs args)
+    {
+        if (args.Key == null || args.Key.Equals("Enter"))
+        {
+            SucheProdukte();
+        }
+        else if (sucheText.Length > 1)
+        {
+            anregungen = await ProduktDienst.GeheAnregungenZurProduktSucheAsync(sucheText);
+        }
+    }
+}

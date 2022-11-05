@@ -1,0 +1,45 @@
+﻿@inject IProduktDienst ProduktDienst
+@implements IDisposable
+
+<center><h2>Top-Produkte von heute</h2></center>
+@if (ProduktDienst.Produkte == null || ProduktDienst.Produkte.Count == 0)
+{
+    <span>@ProduktDienst.Nachricht</span>
+}
+else
+{
+    <div class="container">
+        @foreach (var produkt in ProduktDienst.Produkte)
+        {
+            @if (produkt.Vorgestellt)
+            {
+                <div class="vorgestelltes-produkt">
+                    <div>
+                        <a href="produkt/@produkt.ID">
+                                <img src="@produkt.BildUrl">
+                        </a>
+                    </div>
+                    <h4><a href="produkt/@produkt.ID">@produkt.Title</a></h4>
+                    @if (produkt.ProduktVarianten != null && produkt.ProduktVarianten.Count > 0)
+                    {
+                        <h5 class="preis">
+                            $@produkt.ProduktVarianten[0].Preis
+                        </h5>
+                    }
+                </div>
+            }
+        }
+    </div>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        ProduktDienst.ProdukteGeändert += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ProduktDienst.ProdukteGeändert -= StateHasChanged;
+    }
+}

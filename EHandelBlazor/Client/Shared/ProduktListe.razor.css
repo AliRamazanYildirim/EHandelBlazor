@@ -1,0 +1,28 @@
+﻿.media-img{
+    max-height:200px;
+    max-width:200px;
+    border-radius:6px;
+    margin-bottom:10px;
+    transition:transform .2s;
+}
+.media-img:hover {
+    transform:scale(1.1);
+}
+
+.media-img-wrapper{
+    width:225px;
+    text-align:center;
+}
+.seiten-auswahl{
+    margin-right:10px;
+    margin-bottom:25px;
+}
+@media(max-width:1020px) {
+    .media{
+        flex-direction:column;
+    }
+    .media-img-wrapper{
+        width:auto;
+        height:auto;
+    }
+}

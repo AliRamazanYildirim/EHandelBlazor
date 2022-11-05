@@ -1,9 +1,35 @@
 ﻿@page "/"
+@page "/suche/{sucheText}/{seite:int}"
+@page "/{kategorieUrl}"
+@inject IProduktDienst ProduktDienst
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Mein Laden</PageTitle>
+@if(SucheText == null && KategorieUrl == null)
+{
+    <VorgestellteProdukte/>
+}
+else
+{
+    <ProduktListe />
+}
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code{
+    [Parameter]
+    public string? KategorieUrl { get; set; } = null;
+    [Parameter]
+    public string? SucheText { get; set; } = null;
+    [Parameter]
+    public int Seite { get; set; } = 1;
+    protected override async Task OnParametersSetAsync()
+    {
+        if(SucheText != null)
+        {
+            await ProduktDienst.SucheProdukteAsync(SucheText, Seite);
+        }
+        else
+        {
+            await ProduktDienst.GeheZurProdukteAsync(KategorieUrl);
+        }
+        
+    }
+}
