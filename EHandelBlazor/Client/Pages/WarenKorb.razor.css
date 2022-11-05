@@ -32,3 +32,6 @@ img:hover {
 .btn:hover{
     text-decoration:underline;
 }
+.menge-eingabe{
+    width:70px;
+}
