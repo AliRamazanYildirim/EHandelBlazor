@@ -39,7 +39,8 @@ namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
                     BildUrl = produkt.BildUrl,
                     Preis = produktVariante.Preis,
                     ProduktArt = produktVariante.ProduktArt.Name,
-                    ProduktArtID = produktVariante.ProduktArtID
+                    ProduktArtID = produktVariante.ProduktArtID,
+                    Menge=artikel.Menge
                 };
 
                 resultat.Daten.Add(warenKorbProdukt);

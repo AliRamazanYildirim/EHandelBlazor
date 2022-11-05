@@ -57,7 +57,18 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
             {
                 warenKorb = new List<WarenKorbArtikel>();
             }
-            warenKorb.Add(warenKorbArtikel);
+
+            var gleicherArtikel = warenKorb.Find(a => a.ProduktID == warenKorbArtikel.ProduktID 
+            && a.ProduktArtID == warenKorbArtikel.ProduktArtID);
+            if(gleicherArtikel == null)
+            {
+                warenKorb.Add(warenKorbArtikel);
+            }
+            else
+            {
+                gleicherArtikel.Menge += warenKorbArtikel.Menge;
+            }
+
             await _localStorageService.SetItemAsync("warenkorb", warenKorb);
             BeiÄnderung.Invoke();
         }
