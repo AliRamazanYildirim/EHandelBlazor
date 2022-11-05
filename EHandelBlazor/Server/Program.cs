@@ -1,8 +1,9 @@
+global using EHandelBlazor.Server.Daten;
+global using EHandelBlazor.Server.Dienste.KategorieDienst;
+global using EHandelBlazor.Server.Dienste.ProduktDienst;
+global using EHandelBlazor.Server.Dienste.WarenKorbDienst;
 global using EHandelBlazor.Shared;
 global using Microsoft.EntityFrameworkCore;
-global using EHandelBlazor.Server.Daten;
-global using EHandelBlazor.Server.Dienste.ProduktDienst;
-global using EHandelBlazor.Server.Dienste.KategorieDienst;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<DatenKontext>(opt =>
 
 builder.Services.AddScoped<IProduktDienst, ProduktDienst>();
 builder.Services.AddScoped<IKategorieDienst, KategorieDienst>();
+builder.Services.AddScoped<IWarenKorbDienst, WarenKorbDienst>();
+
 
 
 builder.Services.AddControllersWithViews();
