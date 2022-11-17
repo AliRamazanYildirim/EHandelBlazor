@@ -1,0 +1,28 @@
+﻿@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+
+<div class="dropdown">
+    <button @onclick="UmschalteBenutzerMenu"
+            @onfocusout="AusblendenBenutzerMenu"
+            class="btn btn-warning dropdown-toggle benutzer-button">
+            <i class="oi oi-person"></i>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right @BenutzerMenuCssKlasse">
+        <a href="registrieren" class="dropdown-item">Registrieren</a>
+    </div>
+</div>
+
+@code {
+    private bool zeigeBenutzerMenu = false;
+    private string BenutzerMenuCssKlasse => zeigeBenutzerMenu ? "zeige-menu" : null;
+    private void UmschalteBenutzerMenu()
+    {
+        zeigeBenutzerMenu = !zeigeBenutzerMenu;
+    }
+    private async Task AusblendenBenutzerMenu()
+    {
+        await Task.Delay(200);
+        zeigeBenutzerMenu = false;
+    }
+
+}
