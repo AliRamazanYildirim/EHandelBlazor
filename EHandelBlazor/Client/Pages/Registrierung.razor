@@ -10,18 +10,18 @@
     <div class="mb-3">
         <label for="email">Email</label>
         <InputText id="email" @bind-Value="benutzer.Email" class="form-control"/>
-        <ValidationMessage For="()=>benutzer.Email"></ValidationMessage>
+        <ValidationMessage For="@(()=>benutzer.Email)"></ValidationMessage>
     </div>
     <div class="mb-3">
         <label for="passwort">Passwort</label>
         <InputText id="passwort" @bind-Value="benutzer.Passwort" class="form-control" type="passwort"/>
-        <ValidationMessage For="()=>benutzer.Passwort"></ValidationMessage>
+        <ValidationMessage For="@(()=>benutzer.Passwort)"></ValidationMessage>
 
     </div>
     <div class="mb-3">
         <label for="passwortBestätigen">Passwort Bestätigen</label>
         <InputText id="passwortBestätigen" @bind-Value="benutzer.PasswortBestätigen" class="form-control" type="passwort" />
-        <ValidationMessage For="()=>benutzer.PasswortBestätigen"></ValidationMessage>
+        <ValidationMessage For="@(()=>benutzer.PasswortBestätigen)"></ValidationMessage>
 
     </div>
     <button type="submit" class="btn btn-outline-success">Registrieren</button>
