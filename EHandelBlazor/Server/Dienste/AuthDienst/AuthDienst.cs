@@ -2,9 +2,20 @@
 {
     public class AuthDienst : IAuthDienst
     {
-        public Task<bool> BenutzerExistiertAsync(string email)
+        private readonly DatenKontext _kontext;
+
+        public AuthDienst(DatenKontext kontext)
         {
-            throw new NotImplementedException();
+            _kontext = kontext;
+        }
+
+        public async Task<bool> BenutzerExistiertAsync(string email)
+        {
+            if(await _kontext.Benutzer.AnyAsync(benutzer=>benutzer.Email.ToLower().Equals(email.ToLower())))
+            {
+                return true;
+            }
+            return false;
         }
 
         public Task<DienstAntwort<int>> RegistrierenAsync(Benutzer benutzer, string passwort)
