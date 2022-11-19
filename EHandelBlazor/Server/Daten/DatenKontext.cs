@@ -8,6 +8,8 @@ namespace EHandelBlazor.Server.Daten
         public DbSet<Kategorie> Kategorien { get; set; }
         public DbSet<ProduktArt> ProduktArten { get; set; }
         public DbSet<ProduktVariante> ProduktVarianten { get; set; }
+        public DbSet<Benutzer> Benutzer { get; set; }
+
 
         public DatenKontext(DbContextOptions<DatenKontext> options):base(options)
         {
