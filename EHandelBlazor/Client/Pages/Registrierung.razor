@@ -1,5 +1,6 @@
 ﻿@page "/registrierung"
 @using Blazored.FluentValidation
+@inject IAuthDienst AuthDienst
 
 <PageTitle>Registrierung</PageTitle>
 <h3>Registrierung</h3>
@@ -25,11 +26,21 @@
 
     </div>
     <button type="submit" class="btn btn-outline-success">Registrieren</button>
+    <div class="text-danger">
+        <span>@fehlerMeldung</span>
+    </div>
 </EditForm>
 @code {
     BenutzerRegistrieren benutzer = new BenutzerRegistrieren();
-    void HandleRegistrierung()
+
+    string fehlerMeldung = string.Empty;
+
+    async Task HandleRegistrierung()
     {
-        Console.WriteLine($"Registrieren Benutzer mit der Email {benutzer.Email}");
+        var resultat = await AuthDienst.RegistrierungAsync(benutzer);
+        if (!resultat.Erfolg)
+            fehlerMeldung = resultat.Nachricht;
+        else
+            fehlerMeldung = string.Empty;
     }
 }
