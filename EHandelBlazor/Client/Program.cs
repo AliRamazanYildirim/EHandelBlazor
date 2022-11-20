@@ -3,11 +3,11 @@ global using System.Net.Http.Json;
 global using EHandelBlazor.Client.Dienste.ProduktDienst;
 global using EHandelBlazor.Client.Dienste.KategorieDienst;
 global using EHandelBlazor.Client.Dienste.WarenKorbDienst;
+global using EHandelBlazor.Client.Dienste.AuthDienst;
 using EHandelBlazor.Client;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Blazored.LocalStorage;
-
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -18,6 +18,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<IProduktDienst, ProduktDienst>();
 builder.Services.AddScoped<IKategorieDienst, KategorieDienst>();
 builder.Services.AddScoped<IWarenKorbDienst, WarenKorbDienst>();
-
+builder.Services.AddScoped<IAuthDienst, AuthDienst>();
 
 await builder.Build().RunAsync();
