@@ -26,21 +26,24 @@
 
     </div>
     <button type="submit" class="btn btn-outline-success">Registrieren</button>
-    <div class="text-danger">
-        <span>@fehlerMeldung</span>
+    <div class="@nachrichtCssKlasse">
+        <span>@nachricht</span>
     </div>
 </EditForm>
 @code {
     BenutzerRegistrieren benutzer = new BenutzerRegistrieren();
 
-    string fehlerMeldung = string.Empty;
+    string nachricht = string.Empty;
+    string nachrichtCssKlasse = string.Empty;
 
     async Task HandleRegistrierung()
     {
         var resultat = await AuthDienst.RegistrierungAsync(benutzer);
-        if (!resultat.Erfolg)
-            fehlerMeldung = resultat.Nachricht;
+        nachricht = resultat.Nachricht;
+        if (resultat.Erfolg)
+            nachrichtCssKlasse = "text-success";
         else
-            fehlerMeldung = string.Empty;
+            nachrichtCssKlasse = "text-danger";
+
     }
 }

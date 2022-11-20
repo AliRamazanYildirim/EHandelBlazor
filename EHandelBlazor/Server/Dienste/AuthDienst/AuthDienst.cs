@@ -47,7 +47,8 @@ namespace EHandelBlazor.Server.Dienste.AuthDienst
 
             return new DienstAntwort<int>
             {
-                Daten = benutzer.ID
+                Daten = benutzer.ID,
+                Nachricht= "Die Registrierung ist erfolgreich :)"
             };
         }
     }
