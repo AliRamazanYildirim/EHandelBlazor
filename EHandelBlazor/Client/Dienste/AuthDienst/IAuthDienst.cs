@@ -2,5 +2,6 @@
 {
     public interface IAuthDienst
     {
+        Task<DienstAntwort<int>> RegistrierungAsync(BenutzerRegistrieren anfrage);
     }
 }
