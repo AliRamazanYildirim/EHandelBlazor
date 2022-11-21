@@ -55,11 +55,33 @@ namespace EHandelBlazor.Server.Dienste.AuthDienst
 
         public async Task<DienstAntwort<string>> AnmeldungAsync(string email, string passwort)
         {
-            var antwort = new DienstAntwort<string>
+            var antwort = new DienstAntwort<string>();
+            var benutzer = await _kontext.Benutzer.
+                FirstOrDefaultAsync(b => b.Email.ToLower().Equals(email.ToLower()));
+            if(benutzer == null)
             {
-                Daten = "token"
-            };
+                antwort.Erfolg = false;
+                antwort.Nachricht = "Benutzer wurde nicht gefunden.";
+            }
+            else if(!VerifizierenPasswortHash(passwort, benutzer.PasswortHash, benutzer.PasswortSalz))
+            {
+                antwort.Erfolg = false;
+                antwort.Nachricht = "Falsches Passwort.";
+            }
+            else
+            {
+                antwort.Daten = "token";
+            }
+            
             return antwort;
+        }
+        private bool VerifizierenPasswortHash(string passwort, byte[] passwortHash, byte[] passwortSalz)
+        {
+            using (var hashHersteller = new HMACSHA512(passwortSalz))
+            {
+                var berechneteHash = hashHersteller.ComputeHash(System.Text.Encoding.UTF8.GetBytes(passwort));
+                return berechneteHash.SequenceEqual(passwortHash);
+            }
         }
     }
 }
