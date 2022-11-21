@@ -4,7 +4,7 @@ global using EHandelBlazor.Client.Dienste.ProduktDienst;
 global using EHandelBlazor.Client.Dienste.KategorieDienst;
 global using EHandelBlazor.Client.Dienste.WarenKorbDienst;
 global using EHandelBlazor.Client.Dienste.AuthDienst;
-global using Microsoft.AspNetCore.Components.Authorization
+global using Microsoft.AspNetCore.Components.Authorization;
 using EHandelBlazor.Client;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
