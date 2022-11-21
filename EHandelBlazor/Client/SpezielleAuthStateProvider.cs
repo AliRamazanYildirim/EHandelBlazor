@@ -1,17 +1,16 @@
 ﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
 
 namespace EHandelBlazor.Client
 {
-    public class SpezielleAuthProvider : AuthenticationStateProvider
+    public class SpezielleAuthStateProvider : AuthenticationStateProvider
     {
         private readonly ILocalStorageService _localStorageService;
         private readonly HttpClient _httpClient;
 
-        public SpezielleAuthProvider(ILocalStorageService localStorageService, HttpClient httpClient)
+        public SpezielleAuthStateProvider(ILocalStorageService localStorageService, HttpClient httpClient)
         {
             _localStorageService = localStorageService;
             _httpClient = httpClient;
