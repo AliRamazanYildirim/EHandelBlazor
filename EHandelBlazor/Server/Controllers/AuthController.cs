@@ -29,7 +29,7 @@ namespace EHandelBlazor.Server.Controllers
             }
             return Ok(antwort);
         }
-        [HttpPost("{anmeldung}")]
+        [HttpPost("anmeldung")]
         public async Task<ActionResult<DienstAntwort<string>>>Anmeldung(BenutzerAnmeldung anfrage)
         {
             var antwort = await _authDienst.AnmeldungAsync(anfrage.Email, anfrage.Passwort);

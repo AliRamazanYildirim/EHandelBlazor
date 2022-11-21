@@ -1,4 +1,7 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace EHandelBlazor.Server.Dienste.AuthDienst
@@ -6,10 +9,12 @@ namespace EHandelBlazor.Server.Dienste.AuthDienst
     public class AuthDienst : IAuthDienst
     {
         private readonly DatenKontext _kontext;
+        private readonly IConfiguration _configuration;
 
-        public AuthDienst(DatenKontext kontext)
+        public AuthDienst(DatenKontext kontext, IConfiguration configuration)
         {
             _kontext = kontext;
+            _configuration = configuration;
         }
 
         public async Task<bool> BenutzerExistiertAsync(string email)
@@ -70,7 +75,7 @@ namespace EHandelBlazor.Server.Dienste.AuthDienst
             }
             else
             {
-                antwort.Daten = "token";
+                antwort.Daten = ErstellenToken(benutzer);
             }
             
             return antwort;
@@ -82,6 +87,28 @@ namespace EHandelBlazor.Server.Dienste.AuthDienst
                 var berechneteHash = hashHersteller.ComputeHash(System.Text.Encoding.UTF8.GetBytes(passwort));
                 return berechneteHash.SequenceEqual(passwortHash);
             }
+        }
+
+        private string ErstellenToken(Benutzer benutzer)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, benutzer.ID.ToString()),
+                new Claim(ClaimTypes.Name, benutzer.Email)
+            };
+
+            var schlüssel = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+                .GetBytes(_configuration.GetSection("AppEinstellungen:Token").Value));
+
+            var creds = new SigningCredentials(schlüssel, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                claims:claims,
+                expires:DateTime.Now.AddDays(1),
+                signingCredentials:creds);
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            return jwt;
         }
     }
 }
