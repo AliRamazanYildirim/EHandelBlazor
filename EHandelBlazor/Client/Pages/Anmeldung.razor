@@ -1,5 +1,6 @@
 ﻿@page "/anmeldung"
 @using Blazored.FluentValidation
+@using Microsoft.AspNetCore.WebUtilities;
 @inject IAuthDienst AuthDienst
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
@@ -31,7 +32,18 @@
 @code {
     private BenutzerAnmeldung benutzer = new BenutzerAnmeldung();
 
-    string fehlerNachricht = string.Empty;
+    private string returnUrl = string.Empty;
+
+    private string fehlerNachricht = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if(QueryHelpers.ParseQuery(uri.Query).TryGetValue("returnUrl", out var url))
+        {
+            returnUrl = url;
+        }
+    }
 
     private async Task HandleAnmeldung()
     {
@@ -41,7 +53,7 @@
             fehlerNachricht = string.Empty;
             await LocalStorage.SetItemAsync("authToken", resultat.Daten);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            NavigationManager.NavigateTo("");
+            NavigationManager.NavigateTo(returnUrl);
 
         }
         else

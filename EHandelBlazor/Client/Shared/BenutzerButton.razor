@@ -15,7 +15,7 @@
             </Authorized>
             <NotAuthorized>
                 <a href="registrierung" class="dropdown-item">Registrieren</a>
-                <a href="anmeldung" class="dropdown-item">Anmeldung</a>
+                <a href="anmeldung?returnUrl=@NavigationManager.ToBaseRelativePath(NavigationManager.Uri)" class="dropdown-item">Anmeldung</a>
             </NotAuthorized>
         </AuthorizeView>
 
