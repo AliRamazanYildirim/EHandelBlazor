@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography;
 
 namespace EHandelBlazor.Server.Dienste.AuthDienst
 {
@@ -50,6 +51,15 @@ namespace EHandelBlazor.Server.Dienste.AuthDienst
                 Daten = benutzer.ID,
                 Nachricht= "Die Registrierung ist erfolgreich :)"
             };
+        }
+
+        public async Task<DienstAntwort<string>> AnmeldungAsync(string email, string passwort)
+        {
+            var antwort = new DienstAntwort<string>
+            {
+                Daten = "token"
+            };
+            return antwort;
         }
     }
 }
