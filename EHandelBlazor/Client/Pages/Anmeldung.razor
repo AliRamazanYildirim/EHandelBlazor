@@ -1,6 +1,8 @@
 ﻿@page "/anmeldung"
 @using Blazored.FluentValidation
 @inject IAuthDienst AuthDienst
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 
 <PageTitle>Anmeldung</PageTitle>
 
@@ -22,10 +24,27 @@
     </div>
     <button type="submit" class="btn btn-outline-success">Anmeldung</button>
 </EditForm>
+<div class="text-danger">
+    <span>@fehlerNachricht</span>
+</div>
 @code {
     private BenutzerAnmeldung benutzer = new BenutzerAnmeldung();
+
+    string fehlerNachricht = string.Empty;
+
     private async Task HandleAnmeldung()
     {
-        Console.WriteLine("Melde mich an");
+        var resultat = await AuthDienst.AnmeldungAsync(benutzer);
+        if(resultat.Erfolg)
+        {
+            fehlerNachricht = string.Empty;
+            await LocalStorage.SetItemAsync("authToken", resultat.Daten);
+            NavigationManager.NavigateTo("");
+
+        }
+        else
+        {
+            fehlerNachricht = resultat.Nachricht;
+        }
     }
 }
