@@ -1,0 +1,31 @@
+﻿@page "/anmeldung"
+@using Blazored.FluentValidation
+@inject IAuthDienst AuthDienst
+
+<PageTitle>Anmeldung</PageTitle>
+
+<h3>Anmeldung</h3>
+
+<EditForm Model="benutzer" OnValidSubmit="HandleAnmeldung">
+    <FluentValidationValidator />
+
+    <div class="mb-3">
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="benutzer.Email" class="form-control" />
+        <ValidationMessage For="@(()=>benutzer.Email)"></ValidationMessage>
+    </div>
+    <div class="mb-3">
+        <label for="passwort">Passwort</label>
+        <InputText id="passwort" @bind-Value="benutzer.Passwort" class="form-control" type="passwort" />
+        <ValidationMessage For="@(()=>benutzer.Passwort)"></ValidationMessage>
+
+    </div>
+    <button type="submit" class="btn btn-outline-success">Anmeldung</button>
+</EditForm>
+@code {
+    private BenutzerAnmeldung benutzer = new BenutzerAnmeldung();
+    private async Task HandleAnmeldung()
+    {
+        Console.WriteLine("Melde mich an");
+    }
+}

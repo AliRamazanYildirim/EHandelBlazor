@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace EHandelBlazor.Shared
 {
-    internal class BenutzerAnmeldung
+    public class BenutzerAnmeldung
     {
+        public string Email { get; set; } = string.Empty;
+        public string Passwort { get; set; } = string.Empty;
+
     }
 }
