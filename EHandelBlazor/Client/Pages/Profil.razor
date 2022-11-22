@@ -1,4 +1,7 @@
 ﻿@page "/profil"
+@using Blazored.FluentValidation
+@using EHandelBlazor.Shared.Modelle;
+@inject IAuthDienst AuthDienst
 @using Microsoft.AspNetCore.Authorization;
 @attribute [Authorize]
 
@@ -6,7 +9,30 @@
     <h3>Hi! Sie sind angemeldet mit <i>@context.User.Identity.Name</i>.</h3>
 </AuthorizeView>
 
+<h5>Passwort Ändern</h5>
+<EditForm Model="anfrage" OnValidSubmit="PasswortÄndern">
+    <FluentValidationValidator />
+
+    <div class="mb-3">
+        <label for="passwort">Neues Passwort</label>
+        <InputText id="passwort" @bind-Value="anfrage.Passwort" class="form-control" type="passwort" />
+        <ValidationMessage For="@(()=> anfrage.Passwort)"/>
+    </div>
+    <div class="mb-3">
+        <label for="passwortBestätigen">Bestätigen Neues Passwort</label>
+        <InputText id="passwortBestätigen" @bind-Value="anfrage.PasswortBestätigen" class="form-control" type="passwort" />
+        <ValidationMessage For="@(()=> anfrage.PasswortBestätigen)" />
+    </div>
+    <button type="submit" class="btn btn-outline-success">Anwenden</button>
+</EditForm>
+@nachricht
 @code {
+    BenutzerPasswortÄndern anfrage = new BenutzerPasswortÄndern();
+    string nachricht = string.Empty;
 
-
+    private async Task PasswortÄndern()
+    {
+        var resultat = await AuthDienst.PasswortÄndernAsync(anfrage);
+        nachricht = resultat.Nachricht;
+    }
 }

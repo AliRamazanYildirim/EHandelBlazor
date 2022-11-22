@@ -15,7 +15,8 @@ namespace EHandelBlazor.Shared.Validierungen
             RuleFor(p => p.Passwort).NotEmpty().WithMessage("Ihr Passwort darf nicht leer sein.")
                    .MinimumLength(8).WithMessage("Ihre Passwortlänge muss mindestens 8 betragen.")
                    .MaximumLength(50).WithMessage("Ihre Passwortlänge darf 16 nicht überschreiten.");
-            RuleFor(p => p.Passwort).NotEqual(p => p.PasswortBestätigen).WithMessage("Die Passwörter stimmen nicht überein");
+            RuleFor(p => p.PasswortBestätigen).Equal(p => p.Passwort).WithMessage("Die Passwörter stimmen nicht überein");
+            
 
         }
     }
