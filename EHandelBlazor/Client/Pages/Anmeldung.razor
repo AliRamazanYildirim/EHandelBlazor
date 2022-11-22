@@ -6,6 +6,7 @@
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IWarenKorbDienst WarenKorbDienst
 
 <PageTitle>Anmeldung</PageTitle>
 
@@ -54,6 +55,7 @@
             fehlerNachricht = string.Empty;
             await LocalStorage.SetItemAsync("authToken", resultat.Daten);
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            await WarenKorbDienst.WarenKorbArtikelSpeichernAsync(true);
             NavigationManager.NavigateTo(returnUrl);
 
         }

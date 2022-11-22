@@ -48,5 +48,15 @@ namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
             }
             return resultat;
         }
+
+        public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> WarenKorbArtikelSpeichernAsync(List<WarenKorbArtikel> warenKorbArtikel, int benutzerID)
+        {
+            warenKorbArtikel.ForEach(warenKorbArtikel => warenKorbArtikel.BenutzerID = benutzerID);
+            _kontext.WarenKorbArtikel.AddRange(warenKorbArtikel);
+            await _kontext.SaveChangesAsync();
+
+            return await GeheZurAntwortDerWarenKorbProdukteAsync
+                (await _kontext.WarenKorbArtikel.Where(wk => wk.BenutzerID == benutzerID).ToListAsync());
+        }
     }
 }

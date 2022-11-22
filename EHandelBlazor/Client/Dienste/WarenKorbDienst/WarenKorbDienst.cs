@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using EHandelBlazor.Client.Pages;
 using EHandelBlazor.Shared.Modelle;
 
 namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
@@ -99,6 +100,20 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
             {
                 warenKorbArtikel.Menge = produkt.Menge;
                 await _localStorageService.SetItemAsync("warenkorb", warenKorb);
+            }
+        }
+
+        public async Task WarenKorbArtikelSpeichernAsync(bool leerWarenKorb = false)
+        {
+            var speichernWarenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
+            if (speichernWarenKorb == null)
+            {
+                return;
+            }
+            await _httpClient.PostAsJsonAsync("api/warenkorb", speichernWarenKorb);
+            if(leerWarenKorb)
+            {
+                await _localStorageService.RemoveItemAsync("warenkorb");
             }
         }
     }
