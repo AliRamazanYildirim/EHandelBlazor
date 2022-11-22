@@ -1,5 +1,5 @@
 ﻿using Blazored.LocalStorage;
-using EHandelBlazor.Shared;
+using EHandelBlazor.Shared.Modelle;
 
 namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
 {

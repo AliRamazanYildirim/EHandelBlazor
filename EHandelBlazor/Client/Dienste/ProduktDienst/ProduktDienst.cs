@@ -1,5 +1,6 @@
 ﻿
 using System.Net.Http.Json;
+using EHandelBlazor.Shared.Modelle;
 
 namespace EHandelBlazor.Client.Dienste.ProduktDienst
 {

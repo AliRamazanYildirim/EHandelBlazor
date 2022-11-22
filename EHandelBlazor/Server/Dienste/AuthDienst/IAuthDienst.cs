@@ -1,4 +1,6 @@
-﻿namespace EHandelBlazor.Server.Dienste.AuthDienst
+﻿using EHandelBlazor.Shared.Modelle;
+
+namespace EHandelBlazor.Server.Dienste.AuthDienst
 {
     public interface IAuthDienst
     {

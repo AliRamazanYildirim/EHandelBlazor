@@ -1,4 +1,6 @@
-﻿namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
+﻿using EHandelBlazor.Shared.Modelle;
+
+namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
 {
     public interface IWarenKorbDienst
     {

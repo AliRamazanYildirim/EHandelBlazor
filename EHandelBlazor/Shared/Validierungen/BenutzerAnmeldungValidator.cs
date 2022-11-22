@@ -1,11 +1,12 @@
-﻿using FluentValidation;
+﻿using EHandelBlazor.Shared.Modelle;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EHandelBlazor.Shared
+namespace EHandelBlazor.Shared.Validierungen
 {
     public class BenutzerAnmeldungValidator : AbstractValidator<BenutzerAnmeldung>
     {

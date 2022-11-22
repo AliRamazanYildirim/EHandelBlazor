@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EHandelBlazor.Shared.Modelle;
+using Microsoft.EntityFrameworkCore;
 
 namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
 {

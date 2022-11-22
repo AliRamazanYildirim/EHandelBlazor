@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EHandelBlazor.Shared
+namespace EHandelBlazor.Shared.Modelle
 {
     public class BenutzerAnmeldung
     {

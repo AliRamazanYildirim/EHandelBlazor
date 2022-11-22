@@ -1,4 +1,6 @@
-﻿namespace EHandelBlazor.Server.Dienste.ProduktDienst
+﻿using EHandelBlazor.Shared.Modelle;
+
+namespace EHandelBlazor.Server.Dienste.ProduktDienst
 {
     public interface IProduktDienst
     {

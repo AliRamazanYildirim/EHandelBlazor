@@ -1,4 +1,4 @@
-﻿namespace EHandelBlazor.Shared
+﻿namespace EHandelBlazor.Shared.Modelle
 {
     public class Produkt
     {

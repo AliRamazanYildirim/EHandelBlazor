@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EHandelBlazor.Shared
+namespace EHandelBlazor.Shared.Modelle
 {
-    public class Kategorie
+    public class ProduktArt
     {
         public int ID { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Url { get; set; } = string.Empty;
 
     }
 }

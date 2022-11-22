@@ -1,4 +1,4 @@
-﻿using EHandelBlazor.Shared;
+﻿using EHandelBlazor.Shared.Modelle;
 
 namespace EHandelBlazor.Server.Daten
 {
