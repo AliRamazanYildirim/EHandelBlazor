@@ -57,7 +57,7 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
 
         public async Task InWarenKorbLegen(WarenKorbArtikel warenKorbArtikel)
         {
-            if((await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated)
+            if (await IsUserAuthenticated())
             {
                 Console.WriteLine("Benutzer ist authentifiziert.");
             }
@@ -67,14 +67,14 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
             }
 
             var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
-            if(warenKorb == null)
+            if (warenKorb == null)
             {
                 warenKorb = new List<WarenKorbArtikel>();
             }
 
-            var gleicherArtikel = warenKorb.Find(a => a.ProduktID == warenKorbArtikel.ProduktID 
+            var gleicherArtikel = warenKorb.Find(a => a.ProduktID == warenKorbArtikel.ProduktID
             && a.ProduktArtID == warenKorbArtikel.ProduktArtID);
-            if(gleicherArtikel == null)
+            if (gleicherArtikel == null)
             {
                 warenKorb.Add(warenKorbArtikel);
             }
@@ -86,7 +86,6 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
             await _localStorageService.SetItemAsync("warenkorb", warenKorb);
             BeiÄnderung.Invoke();
         }
-
         public async Task MengeAktualisierenAsync(AntwortDesWarenKorbProduktes produkt)
         {
             var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
@@ -115,6 +114,10 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
             {
                 await _localStorageService.RemoveItemAsync("warenkorb");
             }
+        }
+        private async Task<bool> IsUserAuthenticated()
+        {
+            return (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
         }
     }
 }
