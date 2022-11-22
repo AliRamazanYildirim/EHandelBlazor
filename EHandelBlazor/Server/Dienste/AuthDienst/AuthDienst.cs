@@ -131,9 +131,9 @@ namespace EHandelBlazor.Server.Dienste.AuthDienst
 
             return new DienstAntwort<bool>
             {
-                Daten=true,
-                Nachricht= "Das Passwort wurde geändert"
-            }
+                Daten = true,
+                Nachricht = "Das Passwort wurde geändert"
+            };
         }
     }
 }

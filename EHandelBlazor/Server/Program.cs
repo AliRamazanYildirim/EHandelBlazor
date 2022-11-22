@@ -5,6 +5,9 @@ global using EHandelBlazor.Server.Dienste.WarenKorbDienst;
 global using EHandelBlazor.Server.Dienste.AuthDienst;
 global using EHandelBlazor.Shared;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +21,18 @@ builder.Services.AddScoped<IProduktDienst, ProduktDienst>();
 builder.Services.AddScoped<IKategorieDienst, KategorieDienst>();
 builder.Services.AddScoped<IWarenKorbDienst, WarenKorbDienst>();
 builder.Services.AddScoped<IAuthDienst, AuthDienst>();
-
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options=>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+            .GetBytes(builder.Configuration.GetSection("AppEinstellungen:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+    });
 
 
 builder.Services.AddControllersWithViews();
@@ -52,6 +66,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
