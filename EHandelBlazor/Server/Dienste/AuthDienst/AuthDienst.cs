@@ -111,5 +111,29 @@ namespace EHandelBlazor.Server.Dienste.AuthDienst
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }
+
+        public async Task<DienstAntwort<bool>> PasswortÄndernAsync(int benutzerID, string neuesPasswort)
+        {
+            var benutzer = await _kontext.Benutzer.FindAsync(benutzerID);
+            if(benutzer == null)
+            {
+                return new DienstAntwort<bool>
+                {
+                    Erfolg = false,
+                    Nachricht = "Benutzer wurde nicht gefunden."
+                };
+            }
+            ErstellenPasswortHash(neuesPasswort, out byte[] passwortHash, out byte[] passwortSalz);
+            benutzer.PasswortHash = passwortHash;
+            benutzer.PasswortSalz = passwortSalz;
+
+            await _kontext.SaveChangesAsync();
+
+            return new DienstAntwort<bool>
+            {
+                Daten=true,
+                Nachricht= "Das Passwort wurde geändert"
+            }
+        }
     }
 }
