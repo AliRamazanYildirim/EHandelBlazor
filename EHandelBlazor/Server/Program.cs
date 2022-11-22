@@ -7,7 +7,8 @@ global using EHandelBlazor.Shared;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.IdentityModel.Tokens;
-using System.Text;
+global using EHandelBlazor.Shared.Modelle;
+global using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +34,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
         };
     });
-
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

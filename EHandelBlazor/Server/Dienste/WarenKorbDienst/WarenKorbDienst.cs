@@ -1,16 +1,20 @@
-﻿using EHandelBlazor.Shared.Modelle;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
 
 namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
 {
     public class WarenKorbDienst : IWarenKorbDienst
     {
         private readonly DatenKontext _kontext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public WarenKorbDienst(DatenKontext kontext)
+        public WarenKorbDienst(DatenKontext kontext, IHttpContextAccessor httpContextAccessor)
         {
             _kontext = kontext;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        private int GeheZurBenutzerID() => 
+            int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> GeheZurAntwortDerWarenKorbProdukteAsync(List<WarenKorbArtikel> warenKorbArtikel)
         {
             var resultat = new DienstAntwort<List<AntwortDesWarenKorbProduktes>>
@@ -49,14 +53,14 @@ namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
             return resultat;
         }
 
-        public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> WarenKorbArtikelSpeichernAsync(List<WarenKorbArtikel> warenKorbArtikel, int benutzerID)
+        public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> WarenKorbArtikelSpeichernAsync(List<WarenKorbArtikel> warenKorbArtikel)
         {
-            warenKorbArtikel.ForEach(warenKorbArtikel => warenKorbArtikel.BenutzerID = benutzerID);
+            warenKorbArtikel.ForEach(warenKorbArtikel => warenKorbArtikel.BenutzerID = GeheZurBenutzerID());
             _kontext.WarenKorbArtikel.AddRange(warenKorbArtikel);
             await _kontext.SaveChangesAsync();
 
             return await GeheZurAntwortDerWarenKorbProdukteAsync
-                (await _kontext.WarenKorbArtikel.Where(wk => wk.BenutzerID == benutzerID).ToListAsync());
+                (await _kontext.WarenKorbArtikel.Where(wk => wk.BenutzerID == GeheZurBenutzerID()).ToListAsync());
         }
     }
 }

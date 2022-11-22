@@ -24,8 +24,7 @@ namespace EHandelBlazor.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<DienstAntwort<List<AntwortDesWarenKorbProduktes>>>> WarenKorbArtikelSpeichern(List<WarenKorbArtikel> warenKorbArtikel)
         {
-            var benutzerID = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var resultat = await _warenKorbDienst.WarenKorbArtikelSpeichernAsync(warenKorbArtikel, benutzerID);
+            var resultat = await _warenKorbDienst.WarenKorbArtikelSpeichernAsync(warenKorbArtikel);
             return Ok(resultat);
         }
     }
