@@ -5,10 +5,12 @@ global using EHandelBlazor.Client.Dienste.KategorieDienst;
 global using EHandelBlazor.Client.Dienste.WarenKorbDienst;
 global using EHandelBlazor.Client.Dienste.AuthDienst;
 global using Microsoft.AspNetCore.Components.Authorization;
-using EHandelBlazor.Client;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Blazored.LocalStorage;
+global using EHandelBlazor.Client;
+global using Microsoft.AspNetCore.Components.Web;
+global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+global using Blazored.LocalStorage;
+global using EHandelBlazor.Shared.Modelle;
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

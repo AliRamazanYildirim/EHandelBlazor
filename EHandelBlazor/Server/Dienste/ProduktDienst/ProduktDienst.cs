@@ -1,6 +1,4 @@
-﻿using EHandelBlazor.Shared.Modelle;
-
-namespace EHandelBlazor.Server.Dienste.ProduktDienst
+﻿namespace EHandelBlazor.Server.Dienste.ProduktDienst
 {
     public class ProduktDienst : IProduktDienst
     {

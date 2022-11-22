@@ -1,6 +1,4 @@
-﻿using EHandelBlazor.Shared.Modelle;
-
-namespace EHandelBlazor.Server.Daten
+﻿namespace EHandelBlazor.Server.Daten
 {
     public class DatenKontext:DbContext
     {

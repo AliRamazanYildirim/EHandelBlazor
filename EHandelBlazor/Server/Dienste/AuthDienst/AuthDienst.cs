@@ -1,11 +1,4 @@
-﻿using EHandelBlazor.Shared.Modelle;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Claims;
-using System.Security.Cryptography;
-
-namespace EHandelBlazor.Server.Dienste.AuthDienst
+﻿namespace EHandelBlazor.Server.Dienste.AuthDienst
 {
     public class AuthDienst : IAuthDienst
     {

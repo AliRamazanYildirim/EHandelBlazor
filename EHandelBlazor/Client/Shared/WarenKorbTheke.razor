@@ -5,14 +5,14 @@
 
 <a href="warenkorb" class="btn btn-warning">
     <i class="oi oi-cart"></i>
-    <span class="badge">@GeheZurWatenKorbArtikelTheke()</span>
+    <span class="badge">@GeheZurWarenKorbArtikelTheke()</span>
 </a>
 
 @code {
-    private int GeheZurWatenKorbArtikelTheke()
+    private int GeheZurWarenKorbArtikelTheke()
     {
-        var warenKorb = LocalStorage.GetItem<List<WarenKorbArtikel>>("warenkorb");
-        return warenKorb != null ? warenKorb.Count : 0;
+        var anzahl = LocalStorage.GetItem<int>("warenKorbArtikelAnzahl");
+        return anzahl;
     }
     protected override void OnInitialized()
     {

@@ -1,9 +1,4 @@
-﻿using EHandelBlazor.Server.Daten;
-using EHandelBlazor.Server.Dienste.ProduktDienst;
-using EHandelBlazor.Shared.Modelle;
-using Microsoft.AspNetCore.Mvc;
-
-namespace EHandelBlazor.Server.Controllers
+﻿namespace EHandelBlazor.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

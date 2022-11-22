@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
+﻿namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
 {
     public class WarenKorbDienst : IWarenKorbDienst
     {

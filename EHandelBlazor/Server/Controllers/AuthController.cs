@@ -1,10 +1,4 @@
-﻿using EHandelBlazor.Shared.Modelle;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-
-namespace EHandelBlazor.Server.Controllers
+﻿namespace EHandelBlazor.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

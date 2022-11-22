@@ -1,8 +1,4 @@
-﻿using Blazored.LocalStorage;
-using EHandelBlazor.Client.Pages;
-using EHandelBlazor.Shared.Modelle;
-
-namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
+﻿namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
 {
     public class WarenKorbDienst : IWarenKorbDienst
     {
@@ -31,12 +27,30 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
             {
                 warenKorb.Remove(warenKorbArtikel);
                 await _localStorageService.SetItemAsync("warenkorb", warenKorb);
-                BeiÄnderung.Invoke();
+                await GeheZurWarenKorbArtikelAnzahlAsync();
             }
+        }
+
+        public async Task GeheZurWarenKorbArtikelAnzahlAsync()
+        {
+            if(await IsUserAuthenticated())
+            {
+                var resultat = await _httpClient.GetFromJsonAsync<DienstAntwort<int>>("api/warenkorb/anzahl");
+                var anzahl = resultat.Daten;
+
+                await _localStorageService.SetItemAsync<int>("warenKorbArtikelAnzahl", anzahl);
+            }
+            else
+            {
+                var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
+                await _localStorageService.SetItemAsync<int>("warenKorbArtikelAnzahl", warenKorb != null ? warenKorb.Count : 0);
+            }
+            BeiÄnderung.Invoke();
         }
 
         public async Task<List<WarenKorbArtikel>> GeheZurWarenKorbArtikelAsync()
         {
+            await GeheZurWarenKorbArtikelAnzahlAsync();
             var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
             if (warenKorb == null)
             {
@@ -84,7 +98,7 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
             }
 
             await _localStorageService.SetItemAsync("warenkorb", warenKorb);
-            BeiÄnderung.Invoke();
+            await GeheZurWarenKorbArtikelAnzahlAsync();
         }
         public async Task MengeAktualisierenAsync(AntwortDesWarenKorbProduktes produkt)
         {

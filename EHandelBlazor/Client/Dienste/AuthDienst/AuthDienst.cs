@@ -1,6 +1,4 @@
-﻿using EHandelBlazor.Shared.Modelle;
-
-namespace EHandelBlazor.Client.Dienste.AuthDienst
+﻿namespace EHandelBlazor.Client.Dienste.AuthDienst
 {
     public class AuthDienst : IAuthDienst
     {

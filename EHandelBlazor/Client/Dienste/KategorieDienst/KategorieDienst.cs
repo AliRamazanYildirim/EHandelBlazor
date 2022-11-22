@@ -1,6 +1,4 @@
-﻿using EHandelBlazor.Shared.Modelle;
-
-namespace EHandelBlazor.Client.Dienste.KategorieDienst
+﻿namespace EHandelBlazor.Client.Dienste.KategorieDienst
 {
     public class KategorieDienst : IKategorieDienst
     {

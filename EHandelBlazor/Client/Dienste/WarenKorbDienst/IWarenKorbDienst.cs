@@ -1,6 +1,4 @@
-﻿using EHandelBlazor.Shared.Modelle;
-
-namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
+﻿namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
 {
     public interface IWarenKorbDienst
     {
@@ -11,6 +9,7 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
         Task EntfernenProduktAusWarenKorbAsync(int produktID, int produktArtID);
         Task MengeAktualisierenAsync(AntwortDesWarenKorbProduktes produkt);
         Task WarenKorbArtikelSpeichernAsync(bool leerWarenKorb);
+        Task GeheZurWarenKorbArtikelAnzahlAsync();
 
     }
 }
