@@ -17,6 +17,12 @@ namespace EHandelBlazor.Client.Dienste.AuthDienst
             return await resultat.Content.ReadFromJsonAsync<DienstAntwort<string>>();
         }
 
+        public async Task<DienstAntwort<bool>> PasswortÄndernAsync(BenutzerPasswortÄndern anfrage)
+        {
+            var resultat = await _httpClient.PostAsJsonAsync("api/auth/ändere-passwort", anfrage.Passwort);
+            return await resultat.Content.ReadFromJsonAsync<DienstAntwort<bool>>();
+        }
+
         public async Task<DienstAntwort<int>> RegistrierungAsync(BenutzerRegistrieren anfrage)
         {
             var resultat = await _httpClient.PostAsJsonAsync("api/auth/registrierung", anfrage);
