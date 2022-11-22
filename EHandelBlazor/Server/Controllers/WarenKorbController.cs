@@ -27,5 +27,10 @@ namespace EHandelBlazor.Server.Controllers
             var resultat = await _warenKorbDienst.WarenKorbArtikelSpeichernAsync(warenKorbArtikel);
             return Ok(resultat);
         }
+        [HttpGet("anzahl")]
+        public async Task<ActionResult<DienstAntwort<int>>> GeheZurWarenKorbArtikelAnzahl()
+        {
+            return await _warenKorbDienst.GeheZurWarenKorbArtikelAnzahlAsync();
+        }
     }
 }

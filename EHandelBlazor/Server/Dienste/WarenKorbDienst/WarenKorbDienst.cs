@@ -62,5 +62,14 @@ namespace EHandelBlazor.Server.Dienste.WarenKorbDienst
             return await GeheZurAntwortDerWarenKorbProdukteAsync
                 (await _kontext.WarenKorbArtikel.Where(wk => wk.BenutzerID == GeheZurBenutzerID()).ToListAsync());
         }
+
+        public async Task<DienstAntwort<int>> GeheZurWarenKorbArtikelAnzahlAsync()
+        {
+            var anzahl=(await _kontext.WarenKorbArtikel.Where(wk=>wk.BenutzerID==GeheZurBenutzerID()).ToListAsync()).Count;
+            return new DienstAntwort<int>
+            {
+                Daten = anzahl
+            };
+        }
     }
 }
