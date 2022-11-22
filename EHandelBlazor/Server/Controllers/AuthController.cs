@@ -1,6 +1,8 @@
 ﻿using EHandelBlazor.Shared.Modelle;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EHandelBlazor.Server.Controllers
 {
@@ -34,6 +36,18 @@ namespace EHandelBlazor.Server.Controllers
         public async Task<ActionResult<DienstAntwort<string>>>Anmeldung(BenutzerAnmeldung anfrage)
         {
             var antwort = await _authDienst.AnmeldungAsync(anfrage.Email, anfrage.Passwort);
+            if(!antwort.Erfolg)
+            {
+                return BadRequest(antwort);
+            }
+            return Ok(antwort);
+        }
+        [HttpPost("ändere-passwort"), Authorize]
+        public async Task<ActionResult<DienstAntwort<bool>>> ÄnderenPasswort([FromBody] string neuesPasswort)
+        {
+            var benutzerID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var antwort = await _authDienst.PasswortÄndernAsync(int.Parse(benutzerID), neuesPasswort);
+
             if(!antwort.Erfolg)
             {
                 return BadRequest(antwort);
