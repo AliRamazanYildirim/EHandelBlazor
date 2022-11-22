@@ -7,11 +7,14 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
     {
         private readonly ILocalStorageService _localStorageService;
         private readonly HttpClient _httpClient;
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
 
-        public WarenKorbDienst(ILocalStorageService localStorageService, HttpClient httpClient)
+        public WarenKorbDienst(ILocalStorageService localStorageService, HttpClient httpClient, 
+            AuthenticationStateProvider authenticationStateProvider)
         {
             _localStorageService = localStorageService;
             _httpClient = httpClient;
+            _authenticationStateProvider = authenticationStateProvider;
         }
         public event Action BeiÄnderung;
 
@@ -53,6 +56,15 @@ namespace EHandelBlazor.Client.Dienste.WarenKorbDienst
 
         public async Task InWarenKorbLegen(WarenKorbArtikel warenKorbArtikel)
         {
+            if((await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated)
+            {
+                Console.WriteLine("Benutzer ist authentifiziert.");
+            }
+            else
+            {
+                Console.WriteLine("Benutzer ist nicht authentifiziert");
+            }
+
             var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
             if(warenKorb == null)
             {
