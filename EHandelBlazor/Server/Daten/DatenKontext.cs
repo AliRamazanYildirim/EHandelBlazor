@@ -9,6 +9,7 @@ namespace EHandelBlazor.Server.Daten
         public DbSet<ProduktArt> ProduktArten { get; set; }
         public DbSet<ProduktVariante> ProduktVarianten { get; set; }
         public DbSet<Benutzer> Benutzer { get; set; }
+        public DbSet<WarenKorbArtikel> WarenKorbArtikel { get; set; }
 
 
         public DatenKontext(DbContextOptions<DatenKontext> options):base(options)
@@ -21,6 +22,8 @@ namespace EHandelBlazor.Server.Daten
             modelBuilder.Entity<ProduktVariante>().Property(p => p.OriginalPreis).HasPrecision(18, 2);
 
             modelBuilder.Entity<ProduktVariante>().HasKey(p => new { p.ProduktID, p.ProduktArtID });
+            modelBuilder.Entity<WarenKorbArtikel>().HasKey(wk => new {wk.BenutzerID, wk.ProduktID, wk.ProduktArtID });
+
 
             modelBuilder.Entity<ProduktArt>().HasData(
                     new ProduktArt { ID = 1, Name = "Default" },
