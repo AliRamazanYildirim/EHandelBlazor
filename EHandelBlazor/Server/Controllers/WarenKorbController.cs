@@ -27,5 +27,11 @@
         {
             return await _warenKorbDienst.GeheZurWarenKorbArtikelAnzahlAsync();
         }
+        [HttpGet]
+        public async Task<ActionResult<DienstAntwort<List<AntwortDesWarenKorbProduktes>>>> GeheZurDbWarenKorbProdukte()
+        {
+            var resultat = await _warenKorbDienst.GeheZurDbWarenKorbProdukteAsync();
+            return Ok(resultat);
+        }
     }
 }

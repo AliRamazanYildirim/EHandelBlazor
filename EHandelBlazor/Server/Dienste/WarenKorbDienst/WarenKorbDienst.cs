@@ -57,8 +57,7 @@
             _kontext.WarenKorbArtikel.AddRange(warenKorbArtikel);
             await _kontext.SaveChangesAsync();
 
-            return await GeheZurAntwortDerWarenKorbProdukteAsync
-                (await _kontext.WarenKorbArtikel.Where(wk => wk.BenutzerID == GeheZurBenutzerID()).ToListAsync());
+            return await GeheZurDbWarenKorbProdukteAsync();
         }
 
         public async Task<DienstAntwort<int>> GeheZurWarenKorbArtikelAnzahlAsync()
@@ -68,6 +67,12 @@
             {
                 Daten = anzahl
             };
+        }
+
+        public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> GeheZurDbWarenKorbProdukteAsync()
+        {
+            return await GeheZurAntwortDerWarenKorbProdukteAsync(await _kontext.WarenKorbArtikel
+                .Where(wk => wk.BenutzerID == GeheZurBenutzerID()).ToListAsync());
         }
     }
 }
