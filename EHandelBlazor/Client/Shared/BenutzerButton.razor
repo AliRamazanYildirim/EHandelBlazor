@@ -1,6 +1,7 @@
 ﻿@inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IWarenKorbDienst WarenKorbDienst
 
 <div class="dropdown">
     <button @onclick="UmschalteBenutzerMenu"
@@ -40,6 +41,7 @@
     private async Task Ausloggen()
     {
         await LocalStorage.RemoveItemAsync("authToken");
+        await WarenKorbDienst.GeheZurWarenKorbArtikelAnzahlAsync();
         await AuthenticationStateProvider.GetAuthenticationStateAsync();
         NavigationManager.NavigateTo("");
     }
