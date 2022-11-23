@@ -48,25 +48,24 @@
             BeiÄnderung.Invoke();
         }
 
-        public async Task<List<WarenKorbArtikel>> GeheZurWarenKorbArtikelAsync()
-        {
-            await GeheZurWarenKorbArtikelAnzahlAsync();
-            var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
-            if (warenKorb == null)
-            {
-                warenKorb = new List<WarenKorbArtikel>();
-            }
-            return warenKorb;
-        }
-
         public async Task<List<AntwortDesWarenKorbProduktes>> GeheZurWarenKorbProdukteAsync()
         {
-            var warenKorbArtikel = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
-            var antwort = await _httpClient.PostAsJsonAsync("api/warenkorb/produkte", warenKorbArtikel);
-            var warenKorbProdukte = 
-                await antwort.Content.ReadFromJsonAsync<DienstAntwort<List<AntwortDesWarenKorbProduktes>>>();
-            return warenKorbProdukte.Daten;
+            if(await IsUserAuthenticated())
+            {
+                var antwort = await _httpClient.GetFromJsonAsync<DienstAntwort<List<AntwortDesWarenKorbProduktes>>>("api/warenkorb");
+                return antwort.Daten;
 
+            }
+            else
+            {
+                var warenKorbArtikel = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
+                if (warenKorbArtikel == null)
+                    return new List<AntwortDesWarenKorbProduktes>();
+                var antwort = await _httpClient.PostAsJsonAsync("api/warenkorb/produkte", warenKorbArtikel);
+                var warenKorbProdukte =
+                    await antwort.Content.ReadFromJsonAsync<DienstAntwort<List<AntwortDesWarenKorbProduktes>>>();
+                return warenKorbProdukte.Daten;
+            }
         }
 
         public async Task InWarenKorbLegen(WarenKorbArtikel warenKorbArtikel)

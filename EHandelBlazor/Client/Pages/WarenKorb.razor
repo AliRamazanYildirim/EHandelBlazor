@@ -50,14 +50,11 @@ else
     }
     private async Task WarenKorbLaden()
     {
-        if ((await WarenKorbDienst.GeheZurWarenKorbProdukteAsync()).Count == 0)
+        await WarenKorbDienst.GeheZurWarenKorbArtikelAnzahlAsync();
+        warenKorbProdukte = await WarenKorbDienst.GeheZurWarenKorbProdukteAsync();
+        if (warenKorbProdukte == null || warenKorbProdukte.Count == 0)
         {
             nachricht = "Ihr Warenkorb ist leer.";
-            warenKorbProdukte = new List<AntwortDesWarenKorbProduktes>();
-        }
-        else
-        {
-            warenKorbProdukte = await WarenKorbDienst.GeheZurWarenKorbProdukteAsync();
         }
     }
     private async Task MengeAktualisieren(ChangeEventArgs e, AntwortDesWarenKorbProduktes produkt)
