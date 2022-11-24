@@ -118,5 +118,28 @@
                 Daten = true
             };
         }
+
+        public async Task<DienstAntwort<bool>> ArtikelAusWarenKorbEntfernenAsync(int produktID, int produktArtID)
+        {
+            var warenKorbDbArtikel = await _kontext.WarenKorbArtikel
+                .FirstOrDefaultAsync(wk => wk.ProduktID == produktID && wk.ProduktArtID == produktArtID
+                && wk.BenutzerID == GeheZurBenutzerID());
+            if (warenKorbDbArtikel == null)
+            {
+                return new DienstAntwort<bool>
+                {
+                    Daten = false,
+                    Erfolg = false,
+                    Nachricht = "Warenkorb-Artikel existiert nicht."
+                };
+            }
+            _kontext.WarenKorbArtikel.Remove(warenKorbDbArtikel);
+            await _kontext.SaveChangesAsync();
+
+            return new DienstAntwort<bool>
+            {
+                Daten = true
+            };
+        }
     }
 }

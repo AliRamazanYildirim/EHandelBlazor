@@ -8,6 +8,6 @@
         Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> GeheZurDbWarenKorbProdukteAsync();
         Task<DienstAntwort<bool>> InWarenKorbLegenAsync(WarenKorbArtikel warenKorbArtikel);
         Task<DienstAntwort<bool>> MengeAktualisierenAsync(WarenKorbArtikel warenKorbArtikel);
-
+        Task<DienstAntwort<bool>> ArtikelAusWarenKorbEntfernenAsync(int produktID, int produktArtID);
     }
 }

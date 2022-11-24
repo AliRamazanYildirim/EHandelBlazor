@@ -39,6 +39,13 @@
             return Ok(resultat);
         }
 
+        [HttpDelete("{produktID}/{produktArtID}")]
+        public async Task<ActionResult<DienstAntwort<bool>>> ProduktAusWarenKorbEntfernen(int produktID, int produktArtID)
+        {
+            var resultat = await _warenKorbDienst.ArtikelAusWarenKorbEntfernenAsync(produktID, produktArtID);
+            return Ok(resultat);
+        }
+
         [HttpGet("anzahl")]
         public async Task<ActionResult<DienstAntwort<int>>> GeheZurWarenKorbArtikelAnzahl()
         {

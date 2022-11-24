@@ -6,7 +6,7 @@
         private readonly HttpClient _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
 
-        public WarenKorbDienst(ILocalStorageService localStorageService, HttpClient httpClient, 
+        public WarenKorbDienst(ILocalStorageService localStorageService, HttpClient httpClient,
             AuthenticationStateProvider authenticationStateProvider)
         {
             _localStorageService = localStorageService;
@@ -17,23 +17,30 @@
 
         public async Task EntfernenProduktAusWarenKorbAsync(int produktID, int produktArtID)
         {
-            var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
-            if(warenKorb == null)
+            if (await IsUserAuthenticated())
             {
-                return;
+                await _httpClient.DeleteAsync($"api/warenkorb/{produktID}/{produktArtID}");
             }
-            var warenKorbArtikel = warenKorb.Find(a => a.ProduktID == produktID && a.ProduktArtID == produktArtID);
-            if(warenKorbArtikel != null)
+            else
             {
-                warenKorb.Remove(warenKorbArtikel);
-                await _localStorageService.SetItemAsync("warenkorb", warenKorb);
-                await GeheZurWarenKorbArtikelAnzahlAsync();
+                var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
+                if (warenKorb == null)
+                {
+                    return;
+                }
+                var warenKorbArtikel = warenKorb.Find(a => a.ProduktID == produktID && a.ProduktArtID == produktArtID);
+                if (warenKorbArtikel != null)
+                {
+                    warenKorb.Remove(warenKorbArtikel);
+                    await _localStorageService.SetItemAsync("warenkorb", warenKorb);
+                    
+                }
             }
         }
 
         public async Task GeheZurWarenKorbArtikelAnzahlAsync()
         {
-            if(await IsUserAuthenticated())
+            if (await IsUserAuthenticated())
             {
                 var resultat = await _httpClient.GetFromJsonAsync<DienstAntwort<int>>("api/warenkorb/anzahl");
                 var anzahl = resultat.Daten;
@@ -50,7 +57,7 @@
 
         public async Task<List<AntwortDesWarenKorbProduktes>> GeheZurWarenKorbProdukteAsync()
         {
-            if(await IsUserAuthenticated())
+            if (await IsUserAuthenticated())
             {
                 var antwort = await _httpClient.GetFromJsonAsync<DienstAntwort<List<AntwortDesWarenKorbProduktes>>>("api/warenkorb");
                 return antwort.Daten;
@@ -106,7 +113,7 @@
                 {
                     ProduktID = produkt.ProduktID,
                     Menge = produkt.Menge,
-                    ProduktArtID = produkt.ProduktArtID                   
+                    ProduktArtID = produkt.ProduktArtID
                 };
                 await _httpClient.PutAsJsonAsync("api/warenkorb/menge-aktualisieren", anfrage);
             }
@@ -125,7 +132,7 @@
                     await _localStorageService.SetItemAsync("warenkorb", warenKorb);
                 }
             }
-            
+
         }
 
         public async Task WarenKorbArtikelSpeichernAsync(bool leerWarenKorb = false)
@@ -136,7 +143,7 @@
                 return;
             }
             await _httpClient.PostAsJsonAsync("api/warenkorb", speichernWarenKorb);
-            if(leerWarenKorb)
+            if (leerWarenKorb)
             {
                 await _localStorageService.RemoveItemAsync("warenkorb");
             }
