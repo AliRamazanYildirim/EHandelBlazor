@@ -72,31 +72,30 @@
         {
             if (await IsUserAuthenticated())
             {
-                Console.WriteLine("Benutzer ist authentifiziert.");
+                await _httpClient.PostAsJsonAsync("api/warenkorb/addieren", warenKorbArtikel);
             }
             else
             {
-                Console.WriteLine("Benutzer ist nicht authentifiziert");
-            }
 
-            var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
-            if (warenKorb == null)
-            {
-                warenKorb = new List<WarenKorbArtikel>();
-            }
+                var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
+                if (warenKorb == null)
+                {
+                    warenKorb = new List<WarenKorbArtikel>();
+                }
 
-            var gleicherArtikel = warenKorb.Find(a => a.ProduktID == warenKorbArtikel.ProduktID
-            && a.ProduktArtID == warenKorbArtikel.ProduktArtID);
-            if (gleicherArtikel == null)
-            {
-                warenKorb.Add(warenKorbArtikel);
-            }
-            else
-            {
-                gleicherArtikel.Menge += warenKorbArtikel.Menge;
-            }
+                var gleicherArtikel = warenKorb.Find(a => a.ProduktID == warenKorbArtikel.ProduktID
+                && a.ProduktArtID == warenKorbArtikel.ProduktArtID);
+                if (gleicherArtikel == null)
+                {
+                    warenKorb.Add(warenKorbArtikel);
+                }
+                else
+                {
+                    gleicherArtikel.Menge += warenKorbArtikel.Menge;
+                }
 
-            await _localStorageService.SetItemAsync("warenkorb", warenKorb);
+                await _localStorageService.SetItemAsync("warenkorb", warenKorb);
+            }
             await GeheZurWarenKorbArtikelAnzahlAsync();
         }
         public async Task MengeAktualisierenAsync(AntwortDesWarenKorbProduktes produkt)

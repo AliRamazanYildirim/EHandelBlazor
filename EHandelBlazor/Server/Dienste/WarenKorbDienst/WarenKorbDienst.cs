@@ -74,5 +74,26 @@
             return await GeheZurAntwortDerWarenKorbProdukteAsync(await _kontext.WarenKorbArtikel
                 .Where(wk => wk.BenutzerID == GeheZurBenutzerID()).ToListAsync());
         }
+
+        public async Task<DienstAntwort<bool>> InWarenKorbLegenAsync(WarenKorbArtikel warenKorbArtikel)
+        {
+            warenKorbArtikel.BenutzerID = GeheZurBenutzerID();
+            var dasselbeArtikel = await _kontext.WarenKorbArtikel
+                .FirstOrDefaultAsync(wk => wk.ProduktID == warenKorbArtikel.ProduktID && wk.ProduktArtID == warenKorbArtikel.ProduktArtID
+                && wk.BenutzerID == warenKorbArtikel.BenutzerID);
+            if(dasselbeArtikel == null)
+            {
+                _kontext.WarenKorbArtikel.Add(warenKorbArtikel);
+            }
+            else
+            {
+                dasselbeArtikel.Menge += warenKorbArtikel.Menge;
+            }
+            await _kontext.SaveChangesAsync();
+            return new DienstAntwort<bool>
+            {
+                Daten = true
+            };
+        }
     }
 }
