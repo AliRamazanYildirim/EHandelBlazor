@@ -39,6 +39,9 @@
                 BestellungsArtikel = bestellungArtikel
             };
             _kontext.Bestellungen.Add(bestellung);
+
+            _kontext.WarenKorbArtikel.RemoveRange(_kontext.WarenKorbArtikel
+                .Where(wka => wka.BenutzerID == GeheZurBenutzerID()));
             await _kontext.SaveChangesAsync();
 
             return new DienstAntwort<bool>
