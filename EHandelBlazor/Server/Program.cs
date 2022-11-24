@@ -5,6 +5,7 @@ global using EHandelBlazor.Server.Dienste.ProduktDienst;
 global using EHandelBlazor.Server.Dienste.WarenKorbDienst;
 global using EHandelBlazor.Server.Dienste.BestellungDienst;
 global using EHandelBlazor.Shared.Modelle;
+global using EHandelBlazor.Shared.Düoe;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Http;

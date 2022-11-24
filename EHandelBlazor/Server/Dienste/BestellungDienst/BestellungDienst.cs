@@ -45,5 +45,29 @@
                 Daten = true
             };
         }
+
+        public async Task<DienstAntwort<List<BestellÜbersichtDüo>>> GeheZurBestellungenAsync()
+        {
+            var antwort = new DienstAntwort<List<BestellÜbersichtDüo>>();
+            var bestellungen = await _kontext.Bestellungen
+                .Include(b => b.BestellungsArtikel).ThenInclude(ba => ba.Produkt)
+                .Where(b => b.BenutzerID == _authDienst.GeheZurBenutzerID()).OrderByDescending(b => b.BestellDatum)
+                .ToListAsync();
+
+            var bestellungAntwort = new List<BestellÜbersichtDüo>();
+            bestellungen.ForEach(b => bestellungAntwort.Add(new BestellÜbersichtDüo
+            {
+                ID = b.ID,
+                Bestelldatum = b.BestellDatum,
+                GesamtPreis = b.GesamtPreis,
+                Produkt = b.BestellungsArtikel.Count > 1 ? $"{b.BestellungsArtikel.First().Produkt.Title} und" +
+                $"{b.BestellungsArtikel.Count - 1} mehr.." :
+                b.BestellungsArtikel.First().Produkt.Title,
+                ProduktBildUrl = b.BestellungsArtikel.First().Produkt.BildUrl
+            }));
+
+            antwort.Daten = bestellungAntwort;
+            return antwort;
+        }
     }
 }

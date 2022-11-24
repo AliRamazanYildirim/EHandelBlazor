@@ -20,5 +20,12 @@ namespace EHandelBlazor.Server.Controllers
             var resultat = await _bestellungDienst.BestellungAufgebenAsync();
             return Ok(resultat);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<DienstAntwort<List<BestellÜbersichtDüo>>>> GeheZurBestellungen()
+        {
+            var resultat = await _bestellungDienst.GeheZurBestellungenAsync();
+            return Ok(resultat);
+        }
     }
 }
