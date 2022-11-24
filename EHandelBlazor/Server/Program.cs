@@ -3,6 +3,7 @@ global using EHandelBlazor.Server.Dienste.AuthDienst;
 global using EHandelBlazor.Server.Dienste.KategorieDienst;
 global using EHandelBlazor.Server.Dienste.ProduktDienst;
 global using EHandelBlazor.Server.Dienste.WarenKorbDienst;
+global using EHandelBlazor.Server.Dienste.BestellungDienst;
 global using EHandelBlazor.Shared.Modelle;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authorization;
@@ -13,7 +14,6 @@ global using Microsoft.IdentityModel.Tokens;
 global using System.Security.Claims;
 global using System.IdentityModel.Tokens.Jwt;
 global using System.Security.Cryptography;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +27,8 @@ builder.Services.AddScoped<IProduktDienst, ProduktDienst>();
 builder.Services.AddScoped<IKategorieDienst, KategorieDienst>();
 builder.Services.AddScoped<IWarenKorbDienst, WarenKorbDienst>();
 builder.Services.AddScoped<IAuthDienst, AuthDienst>();
+builder.Services.AddScoped<IBestellungDienst, BestellungDienst>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options=>
     {
