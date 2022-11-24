@@ -8,6 +8,10 @@
         public DbSet<ProduktVariante> ProduktVarianten { get; set; }
         public DbSet<Benutzer> Benutzer { get; set; }
         public DbSet<WarenKorbArtikel> WarenKorbArtikel { get; set; }
+        public DbSet<Bestellung> Bestellungen { get; set; }
+        public DbSet<BestellungsArtikel> BestellungsArtikel { get; set; }
+
+
 
 
         public DatenKontext(DbContextOptions<DatenKontext> options):base(options)
@@ -18,9 +22,13 @@
         {
             modelBuilder.Entity<ProduktVariante>().Property(p => p.Preis).HasPrecision(18, 2);
             modelBuilder.Entity<ProduktVariante>().Property(p => p.OriginalPreis).HasPrecision(18, 2);
+            modelBuilder.Entity<BestellungsArtikel>().Property(p => p.GesamtPreis).HasPrecision(18, 2);
+            modelBuilder.Entity<Bestellung>().Property(p => p.GesamtPreis).HasPrecision(18, 2);
 
             modelBuilder.Entity<ProduktVariante>().HasKey(p => new { p.ProduktID, p.ProduktArtID });
             modelBuilder.Entity<WarenKorbArtikel>().HasKey(wk => new {wk.BenutzerID, wk.ProduktID, wk.ProduktArtID });
+            modelBuilder.Entity<BestellungsArtikel>().HasKey(ba => new { ba.BestellungID, ba.ProduktID, ba.ProduktArtID });
+
 
 
             modelBuilder.Entity<ProduktArt>().HasData(
