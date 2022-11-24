@@ -1,0 +1,39 @@
+﻿@page "/bestellungen"
+@inject IBestellungDienst BestellungDienst
+
+<h3>Bestellungen</h3>
+
+@if(bestellungen == null)
+{
+    <span>Ihre Bestellungen werden geladen...</span>
+}
+else if(bestellungen.Count <= 0)
+{
+    <span>Sie haben keine Bestellung noch.</span>
+}
+else
+{
+    foreach(var bestellung in bestellungen)
+    {
+        <div class="container">
+            <div class="image-wrapper">
+                <img src="@bestellung.ProduktBildUrl" class="bild"/>
+            </div>
+            <div class="details">
+                <h4>@bestellung.Produkt</h4>
+                <span>@bestellung.Bestelldatum</span><br/>
+                <a href="bestellungen/@bestellung.ID">Zeigen Sie mehr...</a>
+            </div>
+            <div class="bestellung-preis">@bestellung.GesamtPreis €</div>
+        </div>
+    }
+}
+
+@code {
+    List<BestellÜbersichtDüo> bestellungen = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        bestellungen = await BestellungDienst.GeheZurBestellungenAsync();
+    }
+}

@@ -3,5 +3,6 @@
     public interface IBestellungDienst
     {
         Task BestellungAufgebenAsync();
+        Task<List<BestellÜbersichtDüo>> GeheZurBestellungenAsync();
     }
 }

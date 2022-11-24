@@ -12,6 +12,8 @@ global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 global using Blazored.LocalStorage;
 global using EHandelBlazor.Shared.Modelle;
 global using Microsoft.AspNetCore.Components;
+global using EHandelBlazor.Shared.Düoe;
+
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
