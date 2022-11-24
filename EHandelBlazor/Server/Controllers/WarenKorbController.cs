@@ -32,6 +32,13 @@
             return Ok(resultat);
         }
 
+        [HttpPut("menge-aktualisieren")]
+        public async Task<ActionResult<DienstAntwort<bool>>> MengeAktualisieren(WarenKorbArtikel warenKorbArtikel)
+        {
+            var resultat = await _warenKorbDienst.MengeAktualisierenAsync(warenKorbArtikel);
+            return Ok(resultat);
+        }
+
         [HttpGet("anzahl")]
         public async Task<ActionResult<DienstAntwort<int>>> GeheZurWarenKorbArtikelAnzahl()
         {

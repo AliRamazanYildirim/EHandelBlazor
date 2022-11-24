@@ -100,18 +100,32 @@
         }
         public async Task MengeAktualisierenAsync(AntwortDesWarenKorbProduktes produkt)
         {
-            var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
-            if (warenKorb == null)
+            if (await IsUserAuthenticated())
             {
-                return;
+                var anfrage = new WarenKorbArtikel
+                {
+                    ProduktID = produkt.ProduktID,
+                    Menge = produkt.Menge,
+                    ProduktArtID = produkt.ProduktArtID                   
+                };
+                await _httpClient.PutAsJsonAsync("api/warenkorb/menge-aktualisieren", anfrage);
             }
-            var warenKorbArtikel = warenKorb.Find(a => a.ProduktID == produkt.ProduktID 
-            && a.ProduktArtID == produkt.ProduktArtID);
-            if (warenKorbArtikel != null)
+            else
             {
-                warenKorbArtikel.Menge = produkt.Menge;
-                await _localStorageService.SetItemAsync("warenkorb", warenKorb);
+                var warenKorb = await _localStorageService.GetItemAsync<List<WarenKorbArtikel>>("warenkorb");
+                if (warenKorb == null)
+                {
+                    return;
+                }
+                var warenKorbArtikel = warenKorb.Find(a => a.ProduktID == produkt.ProduktID
+                && a.ProduktArtID == produkt.ProduktArtID);
+                if (warenKorbArtikel != null)
+                {
+                    warenKorbArtikel.Menge = produkt.Menge;
+                    await _localStorageService.SetItemAsync("warenkorb", warenKorb);
+                }
             }
+            
         }
 
         public async Task WarenKorbArtikelSpeichernAsync(bool leerWarenKorb = false)

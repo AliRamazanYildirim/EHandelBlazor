@@ -7,5 +7,7 @@
         Task<DienstAntwort<int>> GeheZurWarenKorbArtikelAnzahlAsync();
         Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> GeheZurDbWarenKorbProdukteAsync();
         Task<DienstAntwort<bool>> InWarenKorbLegenAsync(WarenKorbArtikel warenKorbArtikel);
+        Task<DienstAntwort<bool>> MengeAktualisierenAsync(WarenKorbArtikel warenKorbArtikel);
+
     }
 }

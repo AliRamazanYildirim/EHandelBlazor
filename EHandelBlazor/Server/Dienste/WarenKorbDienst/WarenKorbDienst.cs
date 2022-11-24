@@ -95,5 +95,28 @@
                 Daten = true
             };
         }
+
+        public async Task<DienstAntwort<bool>> MengeAktualisierenAsync(WarenKorbArtikel warenKorbArtikel)
+        {
+            var warenKorbDbArtikel = await _kontext.WarenKorbArtikel
+                .FirstOrDefaultAsync(wk => wk.ProduktID == warenKorbArtikel.ProduktID && wk.ProduktArtID == warenKorbArtikel.ProduktArtID
+                && wk.BenutzerID == GeheZurBenutzerID());
+            if(warenKorbArtikel == null)
+            {
+                return new DienstAntwort<bool>
+                {
+                    Daten = false,
+                    Erfolg = false,
+                    Nachricht = "Warenkorb-Artikel existiert nicht."
+                };
+            }
+            warenKorbDbArtikel.Menge = warenKorbArtikel.Menge;
+            await _kontext.SaveChangesAsync();
+
+            return  new DienstAntwort<bool>
+            {
+                Daten = true
+            };
+        }
     }
 }
