@@ -8,6 +8,13 @@
 {
     <span>@nachricht</span>
 }
+else if(bestellungAufgeben)
+{
+    <span>
+        Danke für ihre Bestellung 🚛
+        Sie können ihre Bestellung  hier  <a href="bestellungen"> folgen.</a>
+    </span>
+}
 else
 {
     <div>
@@ -39,9 +46,11 @@ else
 @code {
     List<AntwortDesWarenKorbProduktes> warenKorbProdukte = null;
     string nachricht = "Warenkorb wird geladen...";
+    bool bestellungAufgeben = false;
 
     protected override async Task OnInitializedAsync()
     {
+        bestellungAufgeben = false;
         await WarenKorbLaden();
     }
     private async Task EntfernenProduktAusWarenKorb(int produktID, int produktArtID)
@@ -70,5 +79,7 @@ else
     private async Task BestellungAufgeben()
     {
         await BestellungDienst.BestellungAufgebenAsync();
+        await WarenKorbDienst.GeheZurWarenKorbArtikelAnzahlAsync();
+        bestellungAufgeben=true;
     }
 }
