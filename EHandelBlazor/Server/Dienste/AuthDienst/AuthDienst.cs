@@ -4,12 +4,17 @@
     {
         private readonly DatenKontext _kontext;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthDienst(DatenKontext kontext, IConfiguration configuration)
+        public AuthDienst(DatenKontext kontext, IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
         {
             _kontext = kontext;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        public int GeheZurBenutzerID() =>
+            int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         public async Task<bool> BenutzerExistiertAsync(string email)
         {

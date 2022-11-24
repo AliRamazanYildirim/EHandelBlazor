@@ -3,16 +3,13 @@
     public class WarenKorbDienst : IWarenKorbDienst
     {
         private readonly DatenKontext _kontext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthDienst _authDienst;
 
-        public WarenKorbDienst(DatenKontext kontext, IHttpContextAccessor httpContextAccessor)
+        public WarenKorbDienst(DatenKontext kontext, IAuthDienst authDienst)
         {
             _kontext = kontext;
-            _httpContextAccessor = httpContextAccessor;
+            _authDienst = authDienst;
         }
-
-        private int GeheZurBenutzerID() => 
-            int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> GeheZurAntwortDerWarenKorbProdukteAsync(List<WarenKorbArtikel> warenKorbArtikel)
         {
             var resultat = new DienstAntwort<List<AntwortDesWarenKorbProduktes>>
@@ -53,7 +50,7 @@
 
         public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> WarenKorbArtikelSpeichernAsync(List<WarenKorbArtikel> warenKorbArtikel)
         {
-            warenKorbArtikel.ForEach(warenKorbArtikel => warenKorbArtikel.BenutzerID = GeheZurBenutzerID());
+            warenKorbArtikel.ForEach(warenKorbArtikel => warenKorbArtikel.BenutzerID = _authDienst.GeheZurBenutzerID());
             _kontext.WarenKorbArtikel.AddRange(warenKorbArtikel);
             await _kontext.SaveChangesAsync();
 
@@ -62,7 +59,7 @@
 
         public async Task<DienstAntwort<int>> GeheZurWarenKorbArtikelAnzahlAsync()
         {
-            var anzahl=(await _kontext.WarenKorbArtikel.Where(wk=>wk.BenutzerID==GeheZurBenutzerID()).ToListAsync()).Count;
+            var anzahl=(await _kontext.WarenKorbArtikel.Where(wk=>wk.BenutzerID==_authDienst.GeheZurBenutzerID()).ToListAsync()).Count;
             return new DienstAntwort<int>
             {
                 Daten = anzahl
@@ -72,12 +69,12 @@
         public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> GeheZurDbWarenKorbProdukteAsync()
         {
             return await GeheZurAntwortDerWarenKorbProdukteAsync(await _kontext.WarenKorbArtikel
-                .Where(wk => wk.BenutzerID == GeheZurBenutzerID()).ToListAsync());
+                .Where(wk => wk.BenutzerID == _authDienst.GeheZurBenutzerID()).ToListAsync());
         }
 
         public async Task<DienstAntwort<bool>> InWarenKorbLegenAsync(WarenKorbArtikel warenKorbArtikel)
         {
-            warenKorbArtikel.BenutzerID = GeheZurBenutzerID();
+            warenKorbArtikel.BenutzerID = _authDienst.GeheZurBenutzerID();
             var dasselbeArtikel = await _kontext.WarenKorbArtikel
                 .FirstOrDefaultAsync(wk => wk.ProduktID == warenKorbArtikel.ProduktID && wk.ProduktArtID == warenKorbArtikel.ProduktArtID
                 && wk.BenutzerID == warenKorbArtikel.BenutzerID);
@@ -100,7 +97,7 @@
         {
             var warenKorbDbArtikel = await _kontext.WarenKorbArtikel
                 .FirstOrDefaultAsync(wk => wk.ProduktID == warenKorbArtikel.ProduktID && wk.ProduktArtID == warenKorbArtikel.ProduktArtID
-                && wk.BenutzerID == GeheZurBenutzerID());
+                && wk.BenutzerID == _authDienst.GeheZurBenutzerID());
             if(warenKorbArtikel == null)
             {
                 return new DienstAntwort<bool>
@@ -123,7 +120,7 @@
         {
             var warenKorbDbArtikel = await _kontext.WarenKorbArtikel
                 .FirstOrDefaultAsync(wk => wk.ProduktID == produktID && wk.ProduktArtID == produktArtID
-                && wk.BenutzerID == GeheZurBenutzerID());
+                && wk.BenutzerID == _authDienst.GeheZurBenutzerID());
             if (warenKorbDbArtikel == null)
             {
                 return new DienstAntwort<bool>

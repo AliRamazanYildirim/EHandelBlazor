@@ -4,18 +4,14 @@
     {
         private readonly DatenKontext _kontext;
         private readonly IWarenKorbDienst _warenKorbDienst;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthDienst _authDienst;
 
-        public BestellungDienst(DatenKontext kontext, IWarenKorbDienst warenKorbDienst,
-            IHttpContextAccessor httpContextAccessor)
+        public BestellungDienst(DatenKontext kontext, IWarenKorbDienst warenKorbDienst, IAuthDienst authDienst)
         {
             _kontext = kontext;
             _warenKorbDienst = warenKorbDienst;
-            _httpContextAccessor = httpContextAccessor;
+            _authDienst = authDienst;
         }
-
-        private int GeheZurBenutzerID() =>
-            int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         public async Task<DienstAntwort<bool>> BestellungAufgebenAsync()
         {
             var produkte = (await _warenKorbDienst.GeheZurDbWarenKorbProdukteAsync()).Daten;
@@ -33,7 +29,7 @@
 
             var bestellung = new Bestellung
             {
-                BenutzerID = GeheZurBenutzerID(),
+                BenutzerID = _authDienst.GeheZurBenutzerID(),
                 BestellDatum = DateTime.Now,
                 GesamtPreis = gesamtPreis,
                 BestellungsArtikel = bestellungArtikel
@@ -41,7 +37,7 @@
             _kontext.Bestellungen.Add(bestellung);
 
             _kontext.WarenKorbArtikel.RemoveRange(_kontext.WarenKorbArtikel
-                .Where(wka => wka.BenutzerID == GeheZurBenutzerID()));
+                .Where(wka => wka.BenutzerID == _authDienst.GeheZurBenutzerID()));
             await _kontext.SaveChangesAsync();
 
             return new DienstAntwort<bool>
