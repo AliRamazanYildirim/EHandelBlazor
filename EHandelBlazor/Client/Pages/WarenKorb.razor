@@ -1,5 +1,6 @@
 ﻿@page "/warenkorb"
 @inject IWarenKorbDienst WarenKorbDienst
+@inject IBestellungDienst BestellungDienst
 
 <PageTitle>Einkaufswagen</PageTitle>
 <h3>Einkaufswagen</h3>
@@ -33,6 +34,7 @@ else
             Gesamtpreis (@warenKorbProdukte.Count): @warenKorbProdukte.Sum(produkt => produkt.Preis * produkt.Menge) €
         </div>
     </div>
+    <button @onclick="BestellungAufgeben" class="btn alert-success float-end mt-2 m-2">Bestellung Aufgeben</button>
 }
 @code {
     List<AntwortDesWarenKorbProduktes> warenKorbProdukte = null;
@@ -62,6 +64,11 @@ else
         produkt.Menge = int.Parse(e.Value.ToString());
         if (produkt.Menge < 1)
             produkt.Menge = 1;
-            await WarenKorbDienst.MengeAktualisierenAsync(produkt);
+        await WarenKorbDienst.MengeAktualisierenAsync(produkt);
+    }
+
+    private async Task BestellungAufgeben()
+    {
+        await BestellungDienst.BestellungAufgebenAsync();
     }
 }
