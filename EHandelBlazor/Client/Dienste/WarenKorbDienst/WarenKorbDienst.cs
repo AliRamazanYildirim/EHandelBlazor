@@ -4,20 +4,19 @@
     {
         private readonly ILocalStorageService _localStorageService;
         private readonly HttpClient _httpClient;
-        private readonly AuthenticationStateProvider _authenticationStateProvider;
+        private readonly IAuthDienst _authDienst;
 
-        public WarenKorbDienst(ILocalStorageService localStorageService, HttpClient httpClient,
-            AuthenticationStateProvider authenticationStateProvider)
+        public WarenKorbDienst(ILocalStorageService localStorageService, HttpClient httpClient,IAuthDienst authDienst)
         {
             _localStorageService = localStorageService;
             _httpClient = httpClient;
-            _authenticationStateProvider = authenticationStateProvider;
+            _authDienst = authDienst;
         }
         public event Action BeiÄnderung;
 
         public async Task EntfernenProduktAusWarenKorbAsync(int produktID, int produktArtID)
         {
-            if (await IsUserAuthenticated())
+            if (await _authDienst.IsUserAuthenticated())
             {
                 await _httpClient.DeleteAsync($"api/warenkorb/{produktID}/{produktArtID}");
             }
@@ -40,7 +39,7 @@
 
         public async Task GeheZurWarenKorbArtikelAnzahlAsync()
         {
-            if (await IsUserAuthenticated())
+            if (await _authDienst.IsUserAuthenticated())
             {
                 var resultat = await _httpClient.GetFromJsonAsync<DienstAntwort<int>>("api/warenkorb/anzahl");
                 var anzahl = resultat.Daten;
@@ -57,7 +56,7 @@
 
         public async Task<List<AntwortDesWarenKorbProduktes>> GeheZurWarenKorbProdukteAsync()
         {
-            if (await IsUserAuthenticated())
+            if (await _authDienst.IsUserAuthenticated())
             {
                 var antwort = await _httpClient.GetFromJsonAsync<DienstAntwort<List<AntwortDesWarenKorbProduktes>>>("api/warenkorb");
                 return antwort.Daten;
@@ -77,7 +76,7 @@
 
         public async Task InWarenKorbLegen(WarenKorbArtikel warenKorbArtikel)
         {
-            if (await IsUserAuthenticated())
+            if (await _authDienst.IsUserAuthenticated())
             {
                 await _httpClient.PostAsJsonAsync("api/warenkorb/addieren", warenKorbArtikel);
             }
@@ -107,7 +106,7 @@
         }
         public async Task MengeAktualisierenAsync(AntwortDesWarenKorbProduktes produkt)
         {
-            if (await IsUserAuthenticated())
+            if (await _authDienst.IsUserAuthenticated())
             {
                 var anfrage = new WarenKorbArtikel
                 {
@@ -147,10 +146,6 @@
             {
                 await _localStorageService.RemoveItemAsync("warenkorb");
             }
-        }
-        private async Task<bool> IsUserAuthenticated()
-        {
-            return (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
         }
     }
 }

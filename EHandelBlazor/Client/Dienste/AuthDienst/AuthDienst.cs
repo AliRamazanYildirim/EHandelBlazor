@@ -3,16 +3,23 @@
     public class AuthDienst : IAuthDienst
     {
         private readonly HttpClient _httpClient;
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
 
-        public AuthDienst(HttpClient httpClient)
+        public AuthDienst(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider)
         {
             _httpClient = httpClient;
+            _authenticationStateProvider = authenticationStateProvider;
         }
 
         public async Task<DienstAntwort<string>> AnmeldungAsync(BenutzerAnmeldung anfrage)
         {
             var resultat = await _httpClient.PostAsJsonAsync("api/auth/anmeldung", anfrage);
             return await resultat.Content.ReadFromJsonAsync<DienstAntwort<string>>();
+        }
+
+        public async Task<bool> IsUserAuthenticated()
+        {
+            return (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
         }
 
         public async Task<DienstAntwort<bool>> PasswortÄndernAsync(BenutzerPasswortÄndern anfrage)

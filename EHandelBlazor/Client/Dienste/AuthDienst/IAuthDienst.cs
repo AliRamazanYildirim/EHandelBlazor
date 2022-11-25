@@ -5,5 +5,6 @@
         Task<DienstAntwort<int>> RegistrierungAsync(BenutzerRegistrieren anfrage);
         Task<DienstAntwort<string>> AnmeldungAsync(BenutzerAnmeldung anfrage);
         Task<DienstAntwort<bool>> PasswortÄndernAsync(BenutzerPasswortÄndern anfrage);
+        Task<bool> IsUserAuthenticated();
     }
 }
