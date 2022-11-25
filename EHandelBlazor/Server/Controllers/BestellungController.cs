@@ -28,7 +28,7 @@ namespace EHandelBlazor.Server.Controllers
             return Ok(resultat);
         }
 
-        [HttpGet("bestellID")]
+        [HttpGet("{bestellID}")]
         public async Task<ActionResult<DienstAntwort<List<BestellDetailsDüo>>>> GeheZurBestellDetails(int bestellID)
         {
             var resultat = await _bestellungDienst.GeheZurBestellDetailsAsync(bestellID);

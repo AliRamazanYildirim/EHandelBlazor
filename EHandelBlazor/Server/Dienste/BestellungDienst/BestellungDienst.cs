@@ -67,15 +67,15 @@
                 GesamtPreis = bestellung.GesamtPreis,
                 Produkte = new List<BestellProduktDetailsDüo>()
             };
-            bestellung.BestellungsArtikel.ForEach(a=>
+            bestellung.BestellungsArtikel.ForEach(artikel=>
                 bestellDetailsDüo.Produkte.Add(new BestellProduktDetailsDüo
                 { 
-                    ProduktID = a.ProduktID,
-                    BildUrl = a.Produkt.BildUrl,
-                    ProduktArt = a.ProduktArt.Name,
-                    Menge = a.Menge,
-                    Title = a.Produkt.Title,
-                    GesamtPreis = a.GesamtPreis
+                    ProduktID = artikel.ProduktID,
+                    BildUrl = artikel.Produkt.BildUrl,
+                    ProduktArt = artikel.ProduktArt.Name,
+                    Menge = artikel.Menge,
+                    Title = artikel.Produkt.Title,
+                    GesamtPreis = artikel.GesamtPreis
                 }));
             antwort.Daten = bestellDetailsDüo;
             return antwort;
