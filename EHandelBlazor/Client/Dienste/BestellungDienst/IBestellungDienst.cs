@@ -4,5 +4,6 @@
     {
         Task BestellungAufgebenAsync();
         Task<List<BestellÜbersichtDüo>> GeheZurBestellungenAsync();
+        Task<BestellDetailsDüo> GeheZurBestellDetailsAsync(int bestellID);
     }
 }

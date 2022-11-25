@@ -1,0 +1,42 @@
+﻿@page "/bestellungen/{bestellID:int}"
+@inject IBestellungDienst BestellungDienst
+
+@if(bestell == null)
+{
+    <span>Bestellung wird geladen...</span>
+}
+else
+{
+    <h3>Bestellung ab @bestell.BestellDatum</h3>
+    <div>
+        @foreach(var produkt in bestell.Produkte)
+        {
+            <div class="container">
+                <div class="image-wrapper">
+                    <img src="@produkt.BildUrl" class="bild"/>
+                </div>
+                <div class="name">
+                    <h5><a href="/produkt/@produkt.ProduktID">@produkt.Title</a></h5>
+                    <span>@produkt.ProduktArt</span>
+                    <span>Menge:@produkt.Menge</span>
+                </div>
+                <div class="produkt-preis">@produkt.GesamtPreis €</div>
+            </div>
+        }
+        <div class="produkt-preis" >
+            Gesamt:@bestell.GesamtPreis €
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int BestellID { get; set; }
+
+    BestellDetailsDüo bestell = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        bestell = await BestellungDienst.GeheZurBestellDetailsAsync(BestellID);
+    }
+}

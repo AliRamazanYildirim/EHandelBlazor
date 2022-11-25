@@ -27,6 +27,12 @@ namespace EHandelBlazor.Client.Dienste.BestellungDienst
             }
         }
 
+        public async Task<BestellDetailsDüo> GeheZurBestellDetailsAsync(int bestellID)
+        {
+            var resultat = await _httpClient.GetFromJsonAsync<DienstAntwort<BestellDetailsDüo>>($"api/bestellung/{bestellID}");
+            return resultat.Daten;
+        }
+
         public async Task<List<BestellÜbersichtDüo>> GeheZurBestellungenAsync()
         {
             var resultat = await _httpClient.GetFromJsonAsync<DienstAntwort<List<BestellÜbersichtDüo>>>("api/bestellung");
