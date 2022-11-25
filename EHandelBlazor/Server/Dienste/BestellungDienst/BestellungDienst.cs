@@ -46,6 +46,41 @@
             };
         }
 
+        public async Task<DienstAntwort<BestellDetailsDüo>> GeheZurBestellDetailsAsync(int bestellID)
+        {
+            var antwort = new DienstAntwort<BestellDetailsDüo>();
+            var bestellung = await _kontext.Bestellungen.Include(b => b.BestellungsArtikel)
+                .ThenInclude(ba => ba.Produkt).Include(b => b.BestellungsArtikel)
+                .ThenInclude(ba => ba.ProduktArt).Where(b => b.BenutzerID == _authDienst.GeheZurBenutzerID() && b.ID == bestellID)
+                .OrderByDescending(b => b.BestellDatum).FirstOrDefaultAsync();
+
+            if (bestellung == null)
+            {
+                antwort.Erfolg = false;
+                antwort.Nachricht = "Keine Bestellung wurde gefunden";
+                return antwort;
+            }
+
+            var bestellDetailsDüo = new BestellDetailsDüo
+            {
+                BestellDatum = bestellung.BestellDatum,
+                GesamtPreis = bestellung.GesamtPreis,
+                Produkte = new List<BestellProduktDetailsDüo>()
+            };
+            bestellung.BestellungsArtikel.ForEach(a=>
+                bestellDetailsDüo.Produkte.Add(new BestellProduktDetailsDüo
+                { 
+                    ProduktID = a.ProduktID,
+                    BildUrl = a.Produkt.BildUrl,
+                    ProduktArt = a.ProduktArt.Name,
+                    Menge = a.Menge,
+                    Title = a.Produkt.Title,
+                    GesamtPreis = a.GesamtPreis
+                }));
+            antwort.Daten = bestellDetailsDüo;
+            return antwort;
+        }
+
         public async Task<DienstAntwort<List<BestellÜbersichtDüo>>> GeheZurBestellungenAsync()
         {
             var antwort = new DienstAntwort<List<BestellÜbersichtDüo>>();

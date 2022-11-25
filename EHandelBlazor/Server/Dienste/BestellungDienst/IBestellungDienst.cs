@@ -4,5 +4,6 @@
     {
         Task<DienstAntwort<bool>> BestellungAufgebenAsync();
         Task<DienstAntwort<List<BestellÜbersichtDüo>>> GeheZurBestellungenAsync();
+        Task<DienstAntwort<BestellDetailsDüo>> GeheZurBestellDetailsAsync(int bestellID);
     }
 }
