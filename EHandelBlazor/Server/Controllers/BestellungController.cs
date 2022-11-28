@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace EHandelBlazor.Server.Controllers
+﻿namespace EHandelBlazor.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

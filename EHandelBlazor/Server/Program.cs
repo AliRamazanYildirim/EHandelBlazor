@@ -4,6 +4,7 @@ global using EHandelBlazor.Server.Dienste.KategorieDienst;
 global using EHandelBlazor.Server.Dienste.ProduktDienst;
 global using EHandelBlazor.Server.Dienste.WarenKorbDienst;
 global using EHandelBlazor.Server.Dienste.BestellungDienst;
+global using EHandelBlazor.Server.Dienste.ZahlungDienst;
 global using EHandelBlazor.Shared.Modelle;
 global using EHandelBlazor.Shared.Düoe;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,6 +16,11 @@ global using Microsoft.IdentityModel.Tokens;
 global using System.Security.Claims;
 global using System.IdentityModel.Tokens.Jwt;
 global using System.Security.Cryptography;
+global using Stripe.Checkout;
+global using Stripe;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +35,8 @@ builder.Services.AddScoped<IKategorieDienst, KategorieDienst>();
 builder.Services.AddScoped<IWarenKorbDienst, WarenKorbDienst>();
 builder.Services.AddScoped<IAuthDienst, AuthDienst>();
 builder.Services.AddScoped<IBestellungDienst, BestellungDienst>();
+builder.Services.AddScoped<IZahlungDienst, ZahlungDienst>();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options=>

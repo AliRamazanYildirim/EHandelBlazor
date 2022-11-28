@@ -16,6 +16,9 @@
         public int GeheZurBenutzerID() =>
             int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
+        public string GeheZurBenutzerEmail() =>
+            _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+
         public async Task<bool> BenutzerExistiertAsync(string email)
         {
             if(await _kontext.Benutzer.AnyAsync(benutzer=>benutzer.Email.ToLower().Equals(email.ToLower())))
