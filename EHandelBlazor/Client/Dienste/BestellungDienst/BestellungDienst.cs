@@ -15,15 +15,17 @@ namespace EHandelBlazor.Client.Dienste.BestellungDienst
             _navigationManager = navigationManager;
         }
 
-        public async Task BestellungAufgebenAsync()
+        public async Task<string> BestellungAufgebenAsync()
         {
             if(await IsUserAuthenticated())
             {
-                await _httpClient.PostAsync("api/bestellung", null);
+                var resultat = await _httpClient.PostAsync("api/zahlung/kasse", null);
+                var url = await resultat.Content.ReadAsStringAsync();
+                return url;
             }
             else
             {
-                _navigationManager.NavigateTo("anmeldung");
+                return "anmeldung";
             }
         }
 

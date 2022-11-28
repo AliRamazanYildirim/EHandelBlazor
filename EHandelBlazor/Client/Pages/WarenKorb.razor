@@ -1,19 +1,13 @@
 ﻿@page "/warenkorb"
 @inject IWarenKorbDienst WarenKorbDienst
 @inject IBestellungDienst BestellungDienst
+@inject NavigationManager NavigationManager
 
 <PageTitle>Einkaufswagen</PageTitle>
 <h3>Einkaufswagen</h3>
 @if (warenKorbProdukte == null || warenKorbProdukte.Count == 0)
 {
     <span>@nachricht</span>
-}
-else if(bestellungAufgeben)
-{
-    <span>
-        Danke für ihre Bestellung 🚛
-        Sie können ihre Bestellung  hier  <a href="bestellungen"> folgen.</a>
-    </span>
 }
 else
 {
@@ -41,16 +35,14 @@ else
             Gesamtpreis (@warenKorbProdukte.Count): @warenKorbProdukte.Sum(produkt => produkt.Preis * produkt.Menge) €
         </div>
     </div>
-    <button @onclick="BestellungAufgeben" class="btn alert-success float-end mt-2 m-2">Bestellung Aufgeben</button>
+    <button @onclick="BestellungAufgeben" class="btn alert-success float-end mt-2 m-2">Kasse</button>
 }
 @code {
     List<AntwortDesWarenKorbProduktes> warenKorbProdukte = null;
     string nachricht = "Warenkorb wird geladen...";
-    bool bestellungAufgeben = false;
 
     protected override async Task OnInitializedAsync()
     {
-        bestellungAufgeben = false;
         await WarenKorbLaden();
     }
     private async Task EntfernenProduktAusWarenKorb(int produktID, int produktArtID)
@@ -78,8 +70,7 @@ else
 
     private async Task BestellungAufgeben()
     {
-        await BestellungDienst.BestellungAufgebenAsync();
-        await WarenKorbDienst.GeheZurWarenKorbArtikelAnzahlAsync();
-        bestellungAufgeben=true;
+        string url = await BestellungDienst.BestellungAufgebenAsync();
+        NavigationManager.NavigateTo(url);
     }
 }
