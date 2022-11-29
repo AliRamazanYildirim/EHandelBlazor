@@ -12,9 +12,9 @@
             _warenKorbDienst = warenKorbDienst;
             _authDienst = authDienst;
         }
-        public async Task<DienstAntwort<bool>> BestellungAufgebenAsync()
+        public async Task<DienstAntwort<bool>> BestellungAufgebenAsync(int benutzerID)
         {
-            var produkte = (await _warenKorbDienst.GeheZurDbWarenKorbProdukteAsync()).Daten;
+            var produkte = (await _warenKorbDienst.GeheZurDbWarenKorbProdukteAsync(benutzerID)).Daten;
             decimal gesamtPreis = 0;
             produkte.ForEach(produkt => gesamtPreis += produkt.Preis * produkt.Menge);
 
@@ -29,7 +29,7 @@
 
             var bestellung = new Bestellung
             {
-                BenutzerID = _authDienst.GeheZurBenutzerID(),
+                BenutzerID = benutzerID,
                 BestellDatum = DateTime.Now,
                 GesamtPreis = gesamtPreis,
                 BestellungsArtikel = bestellungArtikel
@@ -37,7 +37,7 @@
             _kontext.Bestellungen.Add(bestellung);
 
             _kontext.WarenKorbArtikel.RemoveRange(_kontext.WarenKorbArtikel
-                .Where(wka => wka.BenutzerID == _authDienst.GeheZurBenutzerID()));
+                .Where(wka => wka.BenutzerID == benutzerID));
             await _kontext.SaveChangesAsync();
 
             return new DienstAntwort<bool>

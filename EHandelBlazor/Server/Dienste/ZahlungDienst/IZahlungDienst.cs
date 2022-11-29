@@ -3,5 +3,6 @@
     public interface IZahlungDienst
     {
         Task<Session> ErstellenKasseSitzungAsync();
+        Task<DienstAntwort<bool>> BestellungenCheckoutAbwickelnAsync(HttpRequest httpRequest);
     }
 }

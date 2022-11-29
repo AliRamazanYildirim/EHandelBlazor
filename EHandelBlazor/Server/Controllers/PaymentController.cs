@@ -16,6 +16,13 @@
             var sitzung = await _zahlungDienst.ErstellenKasseSitzungAsync();
             return Ok(sitzung.Url);
         }
-
+        [HttpPost]
+        public async Task<ActionResult<DienstAntwort<bool>>> BestellungenCheckoutAbwickeln()
+        {
+            var antwort = await _zahlungDienst.BestellungenCheckoutAbwickelnAsync(Request);
+            if (!antwort.Erfolg)
+                return BadRequest(antwort.Nachricht);
+            return Ok(antwort);
+        }
     }
 }

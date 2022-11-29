@@ -6,6 +6,9 @@
         private readonly IAuthDienst _authDienst;
         private readonly IBestellungDienst _bestellungDienst;
 
+
+        const string geheimnis = "whsec_6aeb69cd66d8a7e4d7a0ae0549030bd06e1135c47377f57dab34b499bb1c2970";
+
         public ZahlungDienst(IWarenKorbDienst warenKorbDienst, IAuthDienst authDienst,
             IBestellungDienst bestellungDienst)
         {
@@ -15,6 +18,36 @@
             _authDienst = authDienst;
             _bestellungDienst = bestellungDienst;
         }
+
+        public async Task<DienstAntwort<bool>> BestellungenCheckoutAbwickelnAsync(HttpRequest httpRequest)
+        {
+            var json = await new StreamReader(httpRequest.Body).ReadToEndAsync();
+            try
+            {
+                var stripeEreigniss = EventUtility.ConstructEvent(json, httpRequest.Headers["Stripe-Signature"],
+                    geheimnis);
+                if(stripeEreigniss.Type == Events.CheckoutSessionCompleted)
+                {
+                    var sitzung = stripeEreigniss.Data.Object as Session;
+                    var benutzer = await _authDienst.GeheZurBenutzerNachEmailAsync(sitzung.CustomerEmail);
+                    await _bestellungDienst.BestellungAufgebenAsync(benutzer.ID);
+                }
+                return new DienstAntwort<bool>
+                {
+                    Daten = true
+                };
+            }
+            catch(StripeException e)
+            {
+                return new DienstAntwort<bool>
+                {
+                    Daten = false,
+                    Erfolg = false,
+                    Nachricht = e.Message
+                };
+            }
+        }
+
         public async Task<Session> ErstellenKasseSitzungAsync()
         {
             var produkte = (await _warenKorbDienst.GeheZurDbWarenKorbProdukteAsync()).Daten;

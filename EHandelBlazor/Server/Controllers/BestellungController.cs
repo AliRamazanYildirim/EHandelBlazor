@@ -11,12 +11,6 @@
             _bestellungDienst = bestellungDienst;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<DienstAntwort<bool>>> BestellungAufgeben()
-        {
-            var resultat = await _bestellungDienst.BestellungAufgebenAsync();
-            return Ok(resultat);
-        }
 
         [HttpGet]
         public async Task<ActionResult<DienstAntwort<List<BestellÜbersichtDüo>>>> GeheZurBestellungen()

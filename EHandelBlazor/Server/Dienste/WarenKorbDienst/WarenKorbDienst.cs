@@ -66,10 +66,13 @@
             };
         }
 
-        public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> GeheZurDbWarenKorbProdukteAsync()
+        public async Task<DienstAntwort<List<AntwortDesWarenKorbProduktes>>> GeheZurDbWarenKorbProdukteAsync(int? benutzerID = null)
         {
+            if (benutzerID == null)
+                benutzerID = _authDienst.GeheZurBenutzerID();
+
             return await GeheZurAntwortDerWarenKorbProdukteAsync(await _kontext.WarenKorbArtikel
-                .Where(wk => wk.BenutzerID == _authDienst.GeheZurBenutzerID()).ToListAsync());
+                .Where(wk => wk.BenutzerID == benutzerID).ToListAsync());
         }
 
         public async Task<DienstAntwort<bool>> InWarenKorbLegenAsync(WarenKorbArtikel warenKorbArtikel)

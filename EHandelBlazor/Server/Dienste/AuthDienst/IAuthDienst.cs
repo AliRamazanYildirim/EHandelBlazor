@@ -8,5 +8,6 @@
         Task<DienstAntwort<bool>> PasswortÄndernAsync(int benutzerID, string neuesPasswort);
         int GeheZurBenutzerID();
         string GeheZurBenutzerEmail();
+        Task<Benutzer> GeheZurBenutzerNachEmailAsync(string email);
     }
 }

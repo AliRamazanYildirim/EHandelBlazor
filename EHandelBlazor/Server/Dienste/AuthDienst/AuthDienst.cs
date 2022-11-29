@@ -136,5 +136,10 @@
                 Nachricht = "Das Passwort wurde geändert"
             };
         }
+
+        public async Task<Benutzer> GeheZurBenutzerNachEmailAsync(string email)
+        {
+            return await _kontext.Benutzer.FirstOrDefaultAsync(b => b.Email.Equals(email));
+        }
     }
 }
