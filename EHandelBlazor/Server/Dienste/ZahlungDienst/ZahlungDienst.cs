@@ -77,7 +77,8 @@
                 {
                     AllowedCountries=new List<string>
                     {
-                        "DE"
+                        "DE",
+                        "TR"
                     }
                 },
                 PaymentMethodTypes = new List<string>
