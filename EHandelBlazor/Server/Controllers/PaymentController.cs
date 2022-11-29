@@ -2,11 +2,11 @@
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ZahlungController : ControllerBase
+    public class PaymentController : ControllerBase
     {
         private readonly IZahlungDienst _zahlungDienst;
 
-        public ZahlungController(IZahlungDienst zahlungDienst)
+        public PaymentController(IZahlungDienst zahlungDienst)
         {
             _zahlungDienst = zahlungDienst;
         }

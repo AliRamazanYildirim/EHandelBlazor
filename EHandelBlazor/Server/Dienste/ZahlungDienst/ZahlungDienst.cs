@@ -42,10 +42,10 @@
                 CustomerEmail = _authDienst.GeheZurBenutzerEmail(),
                 PaymentMethodTypes = new List<string>
                 {
-                    "karte"
+                    "card"
                 },
                 LineItems = linieArktikel,
-                Mode = "kasse",
+                Mode = "payment",
                 SuccessUrl = "https://localhost:7260/bestellung-erfolgreich",
                 CancelUrl = "https://localhost:7260/warenkorb"
             };

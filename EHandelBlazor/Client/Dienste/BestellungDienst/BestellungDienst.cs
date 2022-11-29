@@ -19,7 +19,7 @@ namespace EHandelBlazor.Client.Dienste.BestellungDienst
         {
             if(await IsUserAuthenticated())
             {
-                var resultat = await _httpClient.PostAsync("api/zahlung/kasse", null);
+                var resultat = await _httpClient.PostAsync("api/payment/kasse", null);
                 var url = await resultat.Content.ReadAsStringAsync();
                 return url;
             }
