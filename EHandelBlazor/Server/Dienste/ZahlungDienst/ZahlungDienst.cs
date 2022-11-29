@@ -73,6 +73,13 @@
             var options = new SessionCreateOptions
             {
                 CustomerEmail = _authDienst.GeheZurBenutzerEmail(),
+                ShippingAddressCollection= new SessionShippingAddressCollectionOptions
+                {
+                    AllowedCountries=new List<string>
+                    {
+                        "DE"
+                    }
+                },
                 PaymentMethodTypes = new List<string>
                 {
                     "card"
