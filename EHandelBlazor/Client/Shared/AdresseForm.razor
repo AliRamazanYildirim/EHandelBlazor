@@ -1,4 +1,4 @@
-﻿@inject IAdresseDienst AdresseDiens
+﻿@inject IAdresseDienst AdresseDienst
 @if(adresse == null)
 {
     <span>Sie haben noch keine Lieferadresse angegeben.
@@ -54,13 +54,13 @@ else
     bool adresseBearbeiten = false;
     protected override async Task OnInitializedAsync()
     {
-        adresse = await AdresseDiens.GeheZurAdresseAsync();
+        adresse = await AdresseDienst.GeheZurAdresseAsync();
     }
 
     private async Task AdresseSenden()
     {
         adresseBearbeiten = false;
-        adresse = await AdresseDiens.AdresseAktualisierenOderAddierenAsync(adresse);
+        adresse = await AdresseDienst.AdresseAktualisierenOderAddierenAsync(adresse);
     }
 
     private void InitAdresse()
