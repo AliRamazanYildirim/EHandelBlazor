@@ -1,0 +1,75 @@
+﻿@inject IAdresseDienst AdresseDiens
+@if(adresse == null)
+{
+    <span>Sie haben noch keine Lieferadresse angegeben.
+        <button class="btn" @onclick="InitAdresse">Addieren</button>
+    </span>
+}
+else if(!adresseBearbeiten)
+{
+    <p>
+        <span>@adresse.VorName @adresse.NachName</span>
+        <span>@adresse.Straße</span>
+        <span>@adresse.Stadt, @adresse.Staat, @adresse.PostleitZahl</span>
+        <span>@adresse.Land</span>
+    </p>
+    <button class="btn btn-outline-success" @onclick="AdresseBearbeiten">Adresse Bearbeiten</button>
+}
+else
+{
+    <EditForm Model="adresse" OnSubmit="AdresseSenden">
+        <div class="mb-3">
+            <label for="vorname">Vorname</label>
+            <InputText id="vorname" @bind-Value="adresse.VorName" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="nachname">Nachname</label>
+            <InputText id="nachname" @bind-Value="adresse.NachName" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="straße">Straße</label>
+            <InputText id="straße" @bind-Value="adresse.Straße" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="stadt">Stadt</label>
+            <InputText id="stadt" @bind-Value="adresse.Stadt" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="staat">Staat</label>
+            <InputText id="staat" @bind-Value="adresse.Staat" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label for="postleitzahl">Postleitzahl</label>
+            <InputText id="postleitzahl" @bind-Value="adresse.PostleitZahl" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label for="land">Land</label>
+            <InputText id="land" @bind-Value="adresse.Land" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-outline-success">Speichern</button>
+    </EditForm>
+}
+@code {
+    Adresse adresse=null;
+    bool adresseBearbeiten = false;
+    protected override async Task OnInitializedAsync()
+    {
+        adresse = await AdresseDiens.GeheZurAdresseAsync();
+    }
+
+    private async Task AdresseSenden()
+    {
+        adresseBearbeiten = false;
+        adresse = await AdresseDiens.AdresseAktualisierenOderAddierenAsync(adresse);
+    }
+
+    private void InitAdresse()
+    {
+        adresse=new Adresse();
+        adresseBearbeiten = true;
+    }
+    private void AdresseBearbeiten()
+    {
+        adresseBearbeiten = true;
+    }
+}
