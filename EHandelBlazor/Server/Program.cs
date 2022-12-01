@@ -5,6 +5,7 @@ global using EHandelBlazor.Server.Dienste.ProduktDienst;
 global using EHandelBlazor.Server.Dienste.WarenKorbDienst;
 global using EHandelBlazor.Server.Dienste.BestellungDienst;
 global using EHandelBlazor.Server.Dienste.ZahlungDienst;
+global using EHandelBlazor.Server.Dienste.AdresseDienst;
 global using EHandelBlazor.Shared.Modelle;
 global using EHandelBlazor.Shared.Düoe;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -36,6 +37,8 @@ builder.Services.AddScoped<IWarenKorbDienst, WarenKorbDienst>();
 builder.Services.AddScoped<IAuthDienst, AuthDienst>();
 builder.Services.AddScoped<IBestellungDienst, BestellungDienst>();
 builder.Services.AddScoped<IZahlungDienst, ZahlungDienst>();
+builder.Services.AddScoped<IAdresseDienst, AdresseDienst>();
+
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
