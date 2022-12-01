@@ -10,6 +10,8 @@
         public DbSet<WarenKorbArtikel> WarenKorbArtikel { get; set; }
         public DbSet<Bestellung> Bestellungen { get; set; }
         public DbSet<BestellungsArtikel> BestellungsArtikel { get; set; }
+        public DbSet<Adresse> Adressen{ get; set; }
+
 
 
 

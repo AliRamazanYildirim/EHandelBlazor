@@ -13,5 +13,6 @@ namespace EHandelBlazor.Shared.Modelle
         public byte[] PasswortHash { get; set; }
         public byte[] PasswortSalz { get; set; }
         public DateTime DatumErstellt { get; set; } = DateTime.Now;
+        public Adresse Adresse { get; set; }
     }
 }
