@@ -1,6 +1,7 @@
 ﻿@page "/warenkorb"
 @inject IWarenKorbDienst WarenKorbDienst
 @inject IBestellungDienst BestellungDienst
+@inject IAuthDienst AuthDienst
 @inject NavigationManager NavigationManager
 
 <PageTitle>Einkaufswagen</PageTitle>
@@ -35,14 +36,23 @@ else
             Gesamtpreis (@warenKorbProdukte.Count): @warenKorbProdukte.Sum(produkt => produkt.Preis * produkt.Menge) €
         </div>
     </div>
+    @if (isAuthenticated)
+    {
+        <div>
+            <h5>Lieferadresse</h5>
+            <AdresseForm />
+        </div>
+    }
     <button @onclick="BestellungAufgeben" class="btn alert-success float-end mt-2 m-2">Kasse</button>
 }
 @code {
     List<AntwortDesWarenKorbProduktes> warenKorbProdukte = null;
     string nachricht = "Warenkorb wird geladen...";
+    bool isAuthenticated = false;
 
     protected override async Task OnInitializedAsync()
     {
+        isAuthenticated = await AuthDienst.IsUserAuthenticated();
         await WarenKorbLaden();
     }
     private async Task EntfernenProduktAusWarenKorb(int produktID, int produktArtID)

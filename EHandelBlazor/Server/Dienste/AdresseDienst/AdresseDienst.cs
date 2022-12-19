@@ -29,6 +29,7 @@
                 dbAdresse.Stadt= adresse.Stadt;
                 dbAdresse.Staat = adresse.Staat;
                 dbAdresse.PostleitZahl = adresse.PostleitZahl;
+                antwort.Daten = adresse;
             }
             await _kontext.SaveChangesAsync();
             return antwort;
