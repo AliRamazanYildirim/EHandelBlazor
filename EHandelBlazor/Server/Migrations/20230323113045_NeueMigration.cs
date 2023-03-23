@@ -1,13 +1,49 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace EHandelBlazor.Server.Migrations
 {
-    public partial class ErsteInitialeErstellen : Migration
+    /// <inheritdoc />
+    public partial class NeueMigration : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Benutzer",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswortHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    PasswortSalz = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    DatumErstellt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Benutzer", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bestellungen",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BenutzerID = table.Column<int>(type: "int", nullable: false),
+                    BestellDatum = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    GesamtPreis = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bestellungen", x => x.ID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Kategorien",
                 columns: table => new
@@ -36,6 +72,46 @@ namespace EHandelBlazor.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WarenKorbArtikel",
+                columns: table => new
+                {
+                    BenutzerID = table.Column<int>(type: "int", nullable: false),
+                    ProduktID = table.Column<int>(type: "int", nullable: false),
+                    ProduktArtID = table.Column<int>(type: "int", nullable: false),
+                    Menge = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WarenKorbArtikel", x => new { x.BenutzerID, x.ProduktID, x.ProduktArtID });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Adressen",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BenutzerID = table.Column<int>(type: "int", nullable: false),
+                    VorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NachName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Straße = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Stadt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Staat = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostleitZahl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Land = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Adressen", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Adressen_Benutzer_BenutzerID",
+                        column: x => x.BenutzerID,
+                        principalTable: "Benutzer",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Produkte",
                 columns: table => new
                 {
@@ -54,6 +130,39 @@ namespace EHandelBlazor.Server.Migrations
                         name: "FK_Produkte_Kategorien_KategorieID",
                         column: x => x.KategorieID,
                         principalTable: "Kategorien",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BestellungsArtikel",
+                columns: table => new
+                {
+                    BestellungID = table.Column<int>(type: "int", nullable: false),
+                    ProduktID = table.Column<int>(type: "int", nullable: false),
+                    ProduktArtID = table.Column<int>(type: "int", nullable: false),
+                    Menge = table.Column<int>(type: "int", nullable: false),
+                    GesamtPreis = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BestellungsArtikel", x => new { x.BestellungID, x.ProduktID, x.ProduktArtID });
+                    table.ForeignKey(
+                        name: "FK_BestellungsArtikel_Bestellungen_BestellungID",
+                        column: x => x.BestellungID,
+                        principalTable: "Bestellungen",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BestellungsArtikel_ProduktArten_ProduktArtID",
+                        column: x => x.ProduktArtID,
+                        principalTable: "ProduktArten",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BestellungsArtikel_Produkte_ProduktID",
+                        column: x => x.ProduktID,
+                        principalTable: "Produkte",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -144,6 +253,22 @@ namespace EHandelBlazor.Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Adressen_BenutzerID",
+                table: "Adressen",
+                column: "BenutzerID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BestellungsArtikel_ProduktArtID",
+                table: "BestellungsArtikel",
+                column: "ProduktArtID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BestellungsArtikel_ProduktID",
+                table: "BestellungsArtikel",
+                column: "ProduktID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Produkte_KategorieID",
                 table: "Produkte",
                 column: "KategorieID");
@@ -154,10 +279,26 @@ namespace EHandelBlazor.Server.Migrations
                 column: "ProduktArtID");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Adressen");
+
+            migrationBuilder.DropTable(
+                name: "BestellungsArtikel");
+
+            migrationBuilder.DropTable(
                 name: "ProduktVarianten");
+
+            migrationBuilder.DropTable(
+                name: "WarenKorbArtikel");
+
+            migrationBuilder.DropTable(
+                name: "Benutzer");
+
+            migrationBuilder.DropTable(
+                name: "Bestellungen");
 
             migrationBuilder.DropTable(
                 name: "ProduktArten");

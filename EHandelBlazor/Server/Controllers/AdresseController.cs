@@ -5,7 +5,6 @@ namespace EHandelBlazor.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class AdresseController : ControllerBase
     {
         private readonly IAdresseDienst _adresseDienst;

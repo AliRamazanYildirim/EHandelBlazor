@@ -1,8 +1,9 @@
 ﻿@inject IAdresseDienst AdresseDienst
 @if(adresse == null)
 {
-    <span>Sie haben noch keine Lieferadresse angegeben.
-        <button class="btn" @onclick="InitAdresse">Addieren</button>
+    <span>
+        Sie haben noch keine Lieferadresse angegeben.<br />
+        <button class="btn btn-outline-danger" @onclick="InitAdresse">Addieren</button>
     </span>
 }
 else if(!adresseBearbeiten)
