@@ -96,7 +96,9 @@
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, benutzer.ID.ToString()),
-                new Claim(ClaimTypes.Name, benutzer.Email)
+                new Claim(ClaimTypes.Name, benutzer.Email),
+                new Claim(ClaimTypes.Role, benutzer.Rolle)
+
             };
 
             var schlüssel = new SymmetricSecurityKey(System.Text.Encoding.UTF8
