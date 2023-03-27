@@ -22,7 +22,7 @@
             var resultat = await _kategorieDienst.GeheZurAdminKategorienAsync();
             return Ok(resultat);
         }
-        [HttpDelete("admin"), Authorize(Roles = "Admin")]
+        [HttpDelete("admin/{id}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<DienstAntwort<List<Kategorie>>>> LöschenKategorie(int ID)
         {
             var resultat = await _kategorieDienst.LöschenKategorieAsync(ID);
