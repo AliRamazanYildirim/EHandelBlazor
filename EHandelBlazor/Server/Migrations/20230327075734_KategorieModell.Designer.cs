@@ -4,6 +4,7 @@ using EHandelBlazor.Server.Daten;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHandelBlazor.Server.Migrations
 {
     [DbContext(typeof(DatenKontext))]
-    partial class DatenKontextModelSnapshot : ModelSnapshot
+    [Migration("20230327075734_KategorieModell")]
+    partial class KategorieModell
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
