@@ -31,7 +31,7 @@
 
         public async Task<DienstAntwort<List<Kategorie>>> GeheZurAdminKategorienAsync()
         {
-            var kategorien = await _kontext.Kategorien.Where(k => k.Gelöscht).ToListAsync();
+            var kategorien = await _kontext.Kategorien.Where(k => !k.Gelöscht).ToListAsync();
             return new DienstAntwort<List<Kategorie>>
             {
                 Daten = kategorien
@@ -40,7 +40,7 @@
 
         public async Task<DienstAntwort<List<Kategorie>>> GeheZurAlleKategorienAsync()
         {
-            var kategorien = await _kontext.Kategorien.Where(k => !k.Gelöscht && k.IstNeu).ToListAsync();
+            var kategorien = await _kontext.Kategorien.Where(k => !k.Gelöscht && k.Sichtbar).ToListAsync();
             return new DienstAntwort<List<Kategorie>>
             {
                 Daten = kategorien

@@ -1,8 +1,105 @@
 ﻿@page "/admin/kategorien"
-@attribute [Authorize(Roles ="Admin")]
+@inject IKategorieDienst KategorieDienst
+@attribute [Authorize(Roles = "Admin")]
+@implements IDisposable
 
 <h3>Kategorien</h3>
 
-@code {
+<div class="header">
+    <div class="col">Name</div>
+    <div class="col">Url</div>
+    <div class="col">Sichtbar</div>
+    <div class="col"></div>
+</div>
 
+@foreach (var kategorie in KategorieDienst.AdminKategorien)
+{
+    @if (kategorie.Bearbeitung)
+    {
+        <EditForm Model="bearbeitungKategorie" OnSubmit="AktualisierenKategorie">
+            <div class="row">
+                <div class="col">
+                    <InputText @bind-Value="bearbeitungKategorie.Name" class="form-control"></InputText>
+                </div>
+                <div class="col">
+                    <InputText @bind-Value="bearbeitungKategorie.Url" class="form-control"></InputText>
+                </div>
+                <div class="col col-sichtbar">
+                    <InputCheckbox @bind-Value="bearbeitungKategorie.Sichtbar" style="transform: scale(1.5,1.5);"></InputCheckbox>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-success">
+                        <i class="oi oi-cloud-upload"></i>
+                    </button>
+                    <button class="btn btn-danger" @onclick="AbbrecheBearbeitung">
+                        <i class="oi oi-circle-x"></i>
+                    </button>
+                </div>
+            </div>
+        </EditForm>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col">
+                @kategorie.Name
+            </div>
+            <div class="col">
+                @kategorie.Url
+            </div>
+            <div class="col col-sichtbar">
+                <span>@(kategorie.Sichtbar ? "✔️" : "")</span>
+            </div>
+            <div class="col">
+                <button class="btn btn-success" @onclick="(() => BearbeiteKategorie(kategorie))">
+                    <i class="oi oi-pencil"></i>
+                </button>
+                <button class="btn btn-danger" @onclick="(() => LöschenKategorie(kategorie.ID))">
+                    <i class="oi oi-trash"></i>
+                </button>
+            </div>
+        </div>
+    }
+}
+<button class="btn btn-success" @onclick="ErstelleNeueKategorie">
+    <i class="oi oi-plus"></i> Erstellen Sie eine neue Kategorie
+</button>
+
+@code {
+    Kategorie bearbeitungKategorie = null;
+    protected override async Task OnInitializedAsync()
+    {
+        await KategorieDienst.GeheZurAdminKategorienAsync();
+        KategorieDienst.BeiÄnderung += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        KategorieDienst.BeiÄnderung -= StateHasChanged;
+    }
+    private void ErstelleNeueKategorie()
+    {
+        bearbeitungKategorie = KategorieDienst.ErstelleNeueKategorie();
+    }
+    private void BearbeiteKategorie(Kategorie kategorie)
+    {
+        kategorie.Bearbeitung = true;
+        bearbeitungKategorie = kategorie;
+    }
+    private async Task AktualisierenKategorie()
+    {
+        if (bearbeitungKategorie.IstNeu)
+            await KategorieDienst.HinzufügenKategorieAsync(bearbeitungKategorie);
+        else
+            await KategorieDienst.AktualisierenKategorieAsync(bearbeitungKategorie);
+        bearbeitungKategorie = new Kategorie();
+    }
+    private async Task AbbrecheBearbeitung()
+    {
+        bearbeitungKategorie = new Kategorie();
+        await KategorieDienst.GeheZurAdminKategorienAsync();
+    }
+    private async Task LöschenKategorie(int ID)
+    {
+        await KategorieDienst.LöschenKategorieAsync(ID);
+    }
 }

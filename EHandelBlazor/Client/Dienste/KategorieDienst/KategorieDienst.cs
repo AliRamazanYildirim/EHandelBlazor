@@ -33,9 +33,6 @@
         {
             var antwort = await _httpClient.GetFromJsonAsync<DienstAntwort<List<Kategorie>>>("api/Kategorie/admin");
             if (antwort != null && antwort.Daten != null)
-            {
-
-            }
             AdminKategorien = antwort.Daten;
         }
 
@@ -43,9 +40,6 @@
         {
             var antwort = await _httpClient.GetFromJsonAsync<DienstAntwort<List<Kategorie>>>("api/Kategorie");
             if(antwort != null && antwort.Daten !=null)
-            {
-
-            }
             Kategorien = antwort.Daten;
         }
 
