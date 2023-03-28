@@ -6,6 +6,7 @@ global using EHandelBlazor.Client.Dienste.WarenKorbDienst;
 global using EHandelBlazor.Client.Dienste.AuthDienst;
 global using EHandelBlazor.Client.Dienste.BestellungDienst;
 global using EHandelBlazor.Client.Dienste.AdresseDienst;
+global using EHandelBlazor.Client.Dienste.ProduktArtDienst;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using EHandelBlazor.Client;
 global using Microsoft.AspNetCore.Components.Web;
@@ -14,7 +15,6 @@ global using Blazored.LocalStorage;
 global using EHandelBlazor.Shared.Modelle;
 global using Microsoft.AspNetCore.Components;
 global using EHandelBlazor.Shared.Düoe;
-
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -28,7 +28,7 @@ builder.Services.AddScoped<IWarenKorbDienst, WarenKorbDienst>();
 builder.Services.AddScoped<IAuthDienst, AuthDienst>();
 builder.Services.AddScoped<IBestellungDienst, BestellungDienst>();
 builder.Services.AddScoped<IAdresseDienst, AdresseDienst>();
-
+builder.Services.AddScoped<IProduktArtDienst, ProduktArtDienst>();
 
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
