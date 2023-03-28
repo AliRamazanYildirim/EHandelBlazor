@@ -20,6 +20,18 @@ namespace EHandelBlazor.Server.Controllers
             var antwort = await _produktArtDienst.GeheZurAlleProduktArtenAsync();
             return Ok(antwort);
         }
+        [HttpPost]
+        public async Task<ActionResult<DienstAntwort<List<ProduktArt>>>> HinzufügeProduktArt(ProduktArt produktArt)
+        {
+            var antwort = await _produktArtDienst.HinzufügeProduktArtAsync(produktArt);
+            return Ok(antwort);
+        }
+        [HttpPut]
+        public async Task<ActionResult<DienstAntwort<List<ProduktArt>>>> AktualisiereProduktArt(ProduktArt produktArt)
+        {
+            var antwort = await _produktArtDienst.AktualisiereProduktArtAsync(produktArt);
+            return Ok(antwort);
+        }
 
     }
 }

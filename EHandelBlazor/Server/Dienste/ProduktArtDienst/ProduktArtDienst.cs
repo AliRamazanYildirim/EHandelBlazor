@@ -8,6 +8,23 @@
         {
             _kontext = kontext;
         }
+
+        public async Task<DienstAntwort<List<ProduktArt>>> AktualisiereProduktArtAsync(ProduktArt produktArt)
+        {
+            var dbProduktArt = await _kontext.ProduktArten.FindAsync(produktArt.ID);
+            if(dbProduktArt==null)
+            {
+                return new DienstAntwort<List<ProduktArt>>
+                {
+                    Erfolg = false,
+                    Nachricht = "Produktart wurde nicht gefunden."
+                };
+            }
+            dbProduktArt.Name = produktArt.Name;
+            await _kontext.SaveChangesAsync();
+            return await GeheZurAlleProduktArtenAsync();
+        }
+
         public async Task<DienstAntwort<List<ProduktArt>>> GeheZurAlleProduktArtenAsync()
         {
             var produktArten = await _kontext.ProduktArten.ToListAsync();
@@ -15,6 +32,13 @@
             {
                 Daten = produktArten
             };
+        }
+
+        public async Task<DienstAntwort<List<ProduktArt>>> HinzufügeProduktArtAsync(ProduktArt produktArt)
+        {
+            _kontext.ProduktArten.Add(produktArt);
+            await _kontext.SaveChangesAsync();
+            return await GeheZurAlleProduktArtenAsync();
         }
     }
 }
