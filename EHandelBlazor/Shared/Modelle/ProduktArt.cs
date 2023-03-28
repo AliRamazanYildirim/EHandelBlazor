@@ -10,6 +10,8 @@ namespace EHandelBlazor.Shared.Modelle
     {
         public int ID { get; set; }
         public string Name { get; set; } = string.Empty;
+        public bool Bearbeitung { get; set; } = false;
+        public bool IstNeu { get; set; } = false;
 
     }
 }

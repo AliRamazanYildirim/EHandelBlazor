@@ -26,8 +26,12 @@
             modelBuilder.Entity<ProduktVariante>().HasKey(p => new { p.ProduktID, p.ProduktArtID });
             modelBuilder.Entity<WarenKorbArtikel>().HasKey(wk => new {wk.BenutzerID, wk.ProduktID, wk.ProduktArtID });
             modelBuilder.Entity<BestellungsArtikel>().HasKey(ba => new { ba.BestellungID, ba.ProduktID, ba.ProduktArtID });
+            
             modelBuilder.Entity<Kategorie>().Ignore(k => k.Bearbeitung);
             modelBuilder.Entity<Kategorie>().Ignore(k => k.IstNeu);
+
+            modelBuilder.Entity<ProduktArt>().Ignore(pa => pa.Bearbeitung);
+            modelBuilder.Entity<ProduktArt>().Ignore(pa => pa.IstNeu);
 
             modelBuilder.Entity<ProduktArt>().HasData(
                     new ProduktArt { ID = 1, Name = "Default" },

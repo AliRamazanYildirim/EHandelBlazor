@@ -19,9 +19,7 @@ global using System.IdentityModel.Tokens.Jwt;
 global using System.Security.Cryptography;
 global using Stripe.Checkout;
 global using Stripe;
-
-
-
+global using EHandelBlazor.Server.Dienste.ProduktArtDienst;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,8 +36,7 @@ builder.Services.AddScoped<IAuthDienst, AuthDienst>();
 builder.Services.AddScoped<IBestellungDienst, BestellungDienst>();
 builder.Services.AddScoped<IZahlungDienst, ZahlungDienst>();
 builder.Services.AddScoped<IAdresseDienst, AdresseDienst>();
-
-
+builder.Services.AddScoped<IProduktArtDienst, ProduktArtDienst>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options=>
