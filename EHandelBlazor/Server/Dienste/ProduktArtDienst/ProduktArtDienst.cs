@@ -36,6 +36,7 @@
 
         public async Task<DienstAntwort<List<ProduktArt>>> HinzufügeProduktArtAsync(ProduktArt produktArt)
         {
+            produktArt.Bearbeitung = produktArt.IstNeu = false;
             _kontext.ProduktArten.Add(produktArt);
             await _kontext.SaveChangesAsync();
             return await GeheZurAlleProduktArtenAsync();

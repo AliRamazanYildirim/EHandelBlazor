@@ -1,5 +1,7 @@
 ﻿@page "/admin/produkt-arten"
 @inject IProduktArtDienst ProduktArtDienst
+@implements IDisposable
+@attribute [Authorize(Roles ="Admin")]
 
 <h3>Produktarten</h3>
 
@@ -43,6 +45,11 @@
     protected override async Task OnInitializedAsync()
     {
         await ProduktArtDienst.GeheZurAlleProduktArten();
+        ProduktArtDienst.BeiÄnderung += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        ProduktArtDienst.BeiÄnderung -= StateHasChanged;
     }
     private void BearbeiteProduktArt(ProduktArt produktArt)
     {
@@ -51,10 +58,14 @@
     }
     private void ErstelleNeueProduktArt()
     {
-
+        bearbeitungProduktArt = ProduktArtDienst.ErstelleNeueProduktArt();
     }
     private async Task AktualisiereProduktArt()
     {
-        
+        if (bearbeitungProduktArt.IstNeu)
+            await ProduktArtDienst.ErstelleProduktArt(bearbeitungProduktArt);
+        else
+            await ProduktArtDienst.AktualisiereProduktArt(bearbeitungProduktArt);
+        bearbeitungProduktArt = new ProduktArt();
     }
 }
