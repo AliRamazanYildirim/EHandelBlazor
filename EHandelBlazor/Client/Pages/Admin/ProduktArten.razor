@@ -1,0 +1,60 @@
+﻿@page "/admin/produkt-arten"
+@inject IProduktArtDienst ProduktArtDienst
+
+<h3>Produktarten</h3>
+
+@foreach (var produktArt in ProduktArtDienst.ProduktArten)
+{
+    @if (produktArt.Bearbeitung)
+    {
+        <EditForm Model="bearbeitungProduktArt" OnSubmit="AktualisiereProduktArt">
+            <div class="row">
+                <div class="col">
+                    <InputText @bind-Value="bearbeitungProduktArt.Name" class="form-control"></InputText>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-success">
+                        <i class="oi oi-cloud-upload"></i>
+                    </button>
+                </div>
+            </div>
+        </EditForm>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col">
+                @produktArt.Name
+            </div>
+            <div class="col">
+                <button class="btn btn-warning" @onclick="@(() => BearbeiteProduktArt(produktArt))">
+                    <i class="oi oi-pencil"></i>
+                </button>
+            </div>
+        </div>
+    }
+}
+<button class="btn btn-success" @onclick="ErstelleNeueProduktArt">
+    <i class="oi oi-plus"></i> Neuen Produktart hinzufügen
+</button>
+
+@code {
+    ProduktArt bearbeitungProduktArt = null;
+    protected override async Task OnInitializedAsync()
+    {
+        await ProduktArtDienst.GeheZurAlleProduktArten();
+    }
+    private void BearbeiteProduktArt(ProduktArt produktArt)
+    {
+        produktArt.Bearbeitung = true;
+        bearbeitungProduktArt = produktArt;
+    }
+    private void ErstelleNeueProduktArt()
+    {
+
+    }
+    private async Task AktualisiereProduktArt()
+    {
+        
+    }
+}
