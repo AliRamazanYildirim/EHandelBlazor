@@ -53,6 +53,17 @@
             return antwort;
         }
 
+        public async Task<DienstAntwort<List<Produkt>>> GeheZurAdminProdukteAsync()
+        {
+            var antwort = new DienstAntwort<List<Produkt>>
+            {
+                Daten = await _kontext.Produkte.Where(p => !p.Gelöscht)
+               .Include(p => p.ProduktVarianten.Where(v => !v.Gelöscht))
+               .ThenInclude(v => v.ProduktArt).ToListAsync()
+            };
+            return antwort;
+        }
+
         public async Task<DienstAntwort<List<Produkt>>> GeheZurProdukteAsync()
         {
             var antwort = new DienstAntwort<List<Produkt>>

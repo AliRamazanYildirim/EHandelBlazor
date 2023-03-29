@@ -8,5 +8,7 @@
         Task<DienstAntwort<ResultatProduktSuche>> SucheProdukteAsync(string suchText, int seite);
         Task<DienstAntwort<List<string>>> GeheAnregungenZurProduktSucheAsync(string suchText);
         Task<DienstAntwort<List<Produkt>>> GeheZurVorgestellteProdukteAsync();
+        Task<DienstAntwort<List<Produkt>>> GeheZurAdminProdukteAsync();
+
     }
 }

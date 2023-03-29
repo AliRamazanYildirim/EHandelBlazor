@@ -10,6 +10,12 @@
         {
             _produktDienst = produktDienst;
         }
+        [HttpGet("admin"), Authorize(Roles ="Admin")]
+        public async Task<ActionResult<DienstAntwort<List<Produkt>>>> GeheZurAdminProdukte()
+        {
+            var resultat = await _produktDienst.GeheZurAdminProdukteAsync();
+            return Ok(resultat);
+        }
         [HttpGet]
         public async Task<ActionResult<DienstAntwort<List<Produkt>>>>GeheZurProdukte()
         {
