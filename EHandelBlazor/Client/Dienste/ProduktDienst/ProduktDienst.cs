@@ -13,6 +13,7 @@
         public int AktuelleSeite { get; set; } = 1;
         public int SeitenZahl { get; set; } = 0;
         public string LetzterSuchText { get; set; } = string.Empty;
+        public List<Produkt> AdminProdukte { get; set; }
 
         public event Action ProdukteGeändert;
 
@@ -26,6 +27,16 @@
         {
             var resultat = await _httpClient.GetFromJsonAsync<DienstAntwort<Produkt>>($"api/produkt/{produktID}");
             return resultat;
+        }
+
+        public async Task GeheZurAdminProdukteAsync()
+        {
+            var resultat = await _httpClient.GetFromJsonAsync<DienstAntwort<List<Produkt>>>("api/produkt/admin");
+            AdminProdukte = resultat.Daten;
+            AktuelleSeite = 1;
+            SeitenZahl = 0;
+            if (AdminProdukte.Count == 0)
+                Nachricht = "Kein Produkt wurde gefunden.";
         }
 
         public async Task GeheZurProdukteAsync(string? kategorieUrl = null)
