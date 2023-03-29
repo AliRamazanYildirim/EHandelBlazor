@@ -10,5 +10,9 @@
         public bool Vorgestellt { get; set; } = false;
         public Kategorie? Kategorie { get; set; }
         public List<ProduktVariante> ProduktVarianten { get; set; } = new List<ProduktVariante>();
+        public bool Sichtbar { get; set; } = true;
+        public bool Gelöscht { get; set; } = false;
+        public bool Bearbeitung { get; set; } = false;
+        public bool IstNeu { get; set; } = false;
     }
 }

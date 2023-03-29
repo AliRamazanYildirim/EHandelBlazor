@@ -16,5 +16,9 @@ namespace EHandelBlazor.Shared.Modelle
         public int ProduktArtID { get; set; }
         public decimal Preis { get; set; }
         public decimal OriginalPreis { get; set; }
+        public bool Sichtbar { get; set; } = true;
+        public bool Gelöscht { get; set; } = false;
+        public bool Bearbeitung { get; set; } = false;
+        public bool IstNeu { get; set; } = false;
     }
 }

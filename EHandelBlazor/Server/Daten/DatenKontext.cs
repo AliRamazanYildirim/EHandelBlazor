@@ -33,6 +33,12 @@
             modelBuilder.Entity<ProduktArt>().Ignore(pa => pa.Bearbeitung);
             modelBuilder.Entity<ProduktArt>().Ignore(pa => pa.IstNeu);
 
+            modelBuilder.Entity<Produkt>().Ignore(pa => pa.Bearbeitung);
+            modelBuilder.Entity<Produkt>().Ignore(pa => pa.IstNeu);
+
+            modelBuilder.Entity<ProduktVariante>().Ignore(pa => pa.Bearbeitung);
+            modelBuilder.Entity<ProduktVariante>().Ignore(pa => pa.IstNeu);
+
             modelBuilder.Entity<ProduktArt>().HasData(
                     new ProduktArt { ID = 1, Name = "Default" },
                     new ProduktArt { ID = 2, Name = "Taschenbuch" },
