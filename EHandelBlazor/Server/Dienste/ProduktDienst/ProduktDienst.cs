@@ -38,8 +38,9 @@
         public async Task<DienstAntwort<Produkt>> GeheZumProduktAsync(int produktID)
         {
             var antwort = new DienstAntwort<Produkt>();
-            var produkt = await _kontext.Produkte.Include(p => p.ProduktVarianten).ThenInclude(v => v.ProduktArt)
-                .FirstOrDefaultAsync(p => p.ID == produktID);
+            var produkt = await _kontext.Produkte.Include(p => p.ProduktVarianten.Where(pv => pv.Sichtbar && !pv.Gelöscht))
+                .ThenInclude(v => v.ProduktArt)
+                .FirstOrDefaultAsync(p => p.ID == produktID && !p.Gelöscht && p.Sichtbar);
             if(produkt == null)
             {
                 antwort.Erfolg = false;
@@ -56,7 +57,8 @@
         {
             var antwort = new DienstAntwort<List<Produkt>>
             {
-                Daten = await _kontext.Produkte.Include(p=>p.ProduktVarianten).ToListAsync()
+                Daten = await _kontext.Produkte.Where(p => p.Sichtbar && !p.Gelöscht)
+                .Include(p => p.ProduktVarianten.Where(v => v.Sichtbar && !v.Gelöscht)).ToListAsync()
             };
             return antwort;
         }
@@ -65,8 +67,9 @@
         {
             var antwort = new DienstAntwort<List<Produkt>>
             {
-                Daten = await _kontext.Produkte.Where(p => p.Kategorie.Url.ToLower().Equals(kategorieUrl.ToLower())).
-                Include(p=>p.ProduktVarianten).ToListAsync()
+                Daten = await _kontext.Produkte.Where(p => p.Kategorie.Url.ToLower().Equals(kategorieUrl.ToLower())
+                && p.Sichtbar && !p.Gelöscht).Include(p => p.ProduktVarianten.Where(v => v.Sichtbar && !v.Gelöscht))
+                .ToListAsync()
             };
             return antwort;
         }
@@ -75,7 +78,8 @@
         {
             var antwort = new DienstAntwort<List<Produkt>>
             {
-                Daten = await _kontext.Produkte.Where(p => p.Vorgestellt).Include(p => p.ProduktVarianten).ToListAsync()
+                Daten = await _kontext.Produkte.Where(p => p.Vorgestellt && p.Sichtbar && !p.Gelöscht)
+                .Include(p => p.ProduktVarianten.Where(v => v.Sichtbar && !v.Gelöscht)).ToListAsync()
             };
             return antwort;
         }
@@ -84,10 +88,9 @@
         {
             var seiteResultate = 2f;
             var seitenZahl = Math.Ceiling((await FindeProdukteNachSuchTextAsync(suchText)).Count / seiteResultate);
-            var produkte = await _kontext.Produkte.Where(p => p.Title.ToLower().Contains(suchText.ToLower())
-                            ||
-                            p.Bezeichnung.ToLower().Contains(suchText.ToLower())).Include(p => p.ProduktVarianten)
-                            .Skip((seite - 1) * (int)seiteResultate)
+            var produkte = await _kontext.Produkte.Where(p => p.Title.ToLower().Contains(suchText.ToLower()) ||
+                            p.Bezeichnung.ToLower().Contains(suchText.ToLower()) && p.Sichtbar && !p.Gelöscht)
+                            .Include(p => p.ProduktVarianten).Skip((seite - 1) * (int)seiteResultate)
                             .Take((int)seiteResultate).ToListAsync();
             var antwort = new DienstAntwort<ResultatProduktSuche>
             {
@@ -104,7 +107,8 @@
         private async Task<List<Produkt>> FindeProdukteNachSuchTextAsync(string suchText)
         {
             return await _kontext.Produkte.Where(p => p.Title.ToLower().Contains(suchText.ToLower())
-                            || p.Bezeichnung.ToLower().Contains(suchText.ToLower())).Include(p => p.ProduktVarianten).ToListAsync();
+                            || p.Bezeichnung.ToLower().Contains(suchText.ToLower()) && p.Sichtbar && !p.Gelöscht)
+                .Include(p => p.ProduktVarianten).ToListAsync();
         }
     }
 }
