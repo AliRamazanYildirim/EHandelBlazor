@@ -3,10 +3,12 @@
     public class ProduktDienst : IProduktDienst
     {
         private readonly DatenKontext _kontext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProduktDienst(DatenKontext kontext)
+        public ProduktDienst(DatenKontext kontext, IHttpContextAccessor httpContextAccessor)
         {
             _kontext = kontext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<DienstAntwort<List<string>>> GeheAnregungenZurProduktSucheAsync(string suchText)
@@ -38,9 +40,20 @@
         public async Task<DienstAntwort<Produkt>> GeheZumProduktAsync(int produktID)
         {
             var antwort = new DienstAntwort<Produkt>();
-            var produkt = await _kontext.Produkte.Include(p => p.ProduktVarianten.Where(pv => pv.Sichtbar && !pv.Gelöscht))
+            Produkt produkt = null;
+            if(_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                produkt = await _kontext.Produkte.Include(p => p.ProduktVarianten.Where(pv => !pv.Gelöscht))
+                .ThenInclude(v => v.ProduktArt)
+                .FirstOrDefaultAsync(p => p.ID == produktID && !p.Gelöscht);
+            }
+            else
+            {
+                produkt = await _kontext.Produkte.Include(p => p.ProduktVarianten.Where(pv => pv.Sichtbar && !pv.Gelöscht))
                 .ThenInclude(v => v.ProduktArt)
                 .FirstOrDefaultAsync(p => p.ID == produktID && !p.Gelöscht && p.Sichtbar);
+            }
+            
             if(produkt == null)
             {
                 antwort.Erfolg = false;
