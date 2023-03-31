@@ -14,5 +14,9 @@
         Task GeheZurProdukteAsync(string? kategorieUrl = null);
         Task<DienstAntwort<Produkt>> GeheZumProduktAsync(int produktID);
         Task GeheZurAdminProdukteAsync();
+        Task<Produkt> ErstelleProduktAsync(Produkt produkt);
+        Task<Produkt> AktualisiereProduktAsync(Produkt produkt);
+        Task LöscheProduktAsync(Produkt produkt);
+
     }
 }

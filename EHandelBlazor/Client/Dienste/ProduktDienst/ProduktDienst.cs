@@ -17,6 +17,19 @@
 
         public event Action ProdukteGeändert;
 
+        public async Task<Produkt> AktualisiereProduktAsync(Produkt produkt)
+        {
+            var resultat = await _httpClient.PutAsJsonAsync($"api/produkt", produkt);
+            return (await resultat.Content.ReadFromJsonAsync<DienstAntwort<Produkt>>()).Daten;
+        }
+
+        public async Task<Produkt> ErstelleProduktAsync(Produkt produkt)
+        {
+            var resultat = await _httpClient.PostAsJsonAsync("api/produkt", produkt);
+            var neuesProdukt = (await resultat.Content.ReadFromJsonAsync<DienstAntwort<Produkt>>()).Daten;
+            return neuesProdukt;
+        }
+
         public async Task<List<string>> GeheAnregungenZurProduktSucheAsync(string suchText)
         {
             var resultat = await _httpClient.GetFromJsonAsync<DienstAntwort<List<string>>>($"api/produkt/sucheAnregungen/{suchText}");
@@ -53,6 +66,11 @@
                 Nachricht = "Kein Produkt wurde gefunden!";
 
             ProdukteGeändert.Invoke();
+        }
+
+        public async Task LöscheProduktAsync(Produkt produkt)
+        {
+            var resultat = await _httpClient.DeleteAsync($"api/produkt/{produkt.ID}");
         }
 
         public async Task SucheProdukteAsync(string suchText,int seite)
