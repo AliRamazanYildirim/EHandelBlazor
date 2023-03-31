@@ -180,7 +180,12 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
                     Nachricht = "Das Produkt wurde nicht gefunden"
                 };
             }
-            dbProdukt.Gelöscht = true;
+            #region Man kann die Remove-Methode verwenden, um das Produkt vollständig von der Datenbank zu löschen.
+            _kontext.Produkte.Remove(dbProdukt);
+            #endregion
+            #region Um das Produkt nur vom Client zu entfernen, kann man mit Boolean Typ das schaffen.   
+            //dbProdukt.Gelöscht = true;
+            #endregion
             await _kontext.SaveChangesAsync();
             return new DienstAntwort<bool>
             {
