@@ -29,6 +29,8 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
             dbProdukt.BildUrl = produkt.BildUrl;
             dbProdukt.KategorieID = produkt.KategorieID;
             dbProdukt.Sichtbar = produkt.Sichtbar;
+            dbProdukt.Vorgestellt = produkt.Vorgestellt;
+
             foreach(var variante in produkt.ProduktVarianten)
             {
                 var dbVariante = await _kontext.ProduktVarianten.SingleOrDefaultAsync(v => v.ProduktID == variante.ProduktID

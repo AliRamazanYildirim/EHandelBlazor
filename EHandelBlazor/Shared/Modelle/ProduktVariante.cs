@@ -10,9 +10,9 @@ namespace EHandelBlazor.Shared.Modelle
     public class ProduktVariante
     {
         [JsonIgnore]
-        public Produkt Produkt { get; set; }
+        public Produkt? Produkt { get; set; }
         public int ProduktID { get; set; }
-        public ProduktArt ProduktArt { get; set; }
+        public ProduktArt? ProduktArt { get; set; }
         public int ProduktArtID { get; set; }
         public decimal Preis { get; set; }
         public decimal OriginalPreis { get; set; }
