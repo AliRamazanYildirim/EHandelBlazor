@@ -10,7 +10,25 @@
         {
             _produktDienst = produktDienst;
         }
-        [HttpGet("admin"), Authorize(Roles ="Admin")]
+        [HttpPost, Authorize(Roles ="Admin")]
+        public async Task<ActionResult<DienstAntwort<Produkt>>> ErstelleProdukt(Produkt produkt)
+        {
+            var resultat = await _produktDienst.ErstelleProduktAsync(produkt);
+            return Ok(resultat);
+        }
+        [HttpPut, Authorize(Roles = "Admin")]
+        public async Task<ActionResult<DienstAntwort<Produkt>>> AktualisiereProdukt(Produkt produkt)
+        {
+            var resultat = await _produktDienst.AktualisiereProduktAsync(produkt);
+            return Ok(resultat);
+        }
+        [HttpDelete("{produktID}"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult<DienstAntwort<bool>>> LöscheProdukt(int produktID)
+        {
+            var resultat = await _produktDienst.LöscheProduktAsync(produktID);
+            return Ok(resultat);
+        }
+        [HttpGet("admin"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<DienstAntwort<List<Produkt>>>> GeheZurAdminProdukte()
         {
             var resultat = await _produktDienst.GeheZurAdminProdukteAsync();

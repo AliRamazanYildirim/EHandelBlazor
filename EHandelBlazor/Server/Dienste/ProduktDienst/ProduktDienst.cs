@@ -1,4 +1,6 @@
-﻿namespace EHandelBlazor.Server.Dienste.ProduktDienst
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace EHandelBlazor.Server.Dienste.ProduktDienst
 {
     public class ProduktDienst : IProduktDienst
     {
@@ -9,6 +11,62 @@
         {
             _kontext = kontext;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task<DienstAntwort<Produkt>> AktualisiereProduktAsync(Produkt produkt)
+        {
+            var dbProdukt = await _kontext.Produkte.FindAsync(produkt.ID);
+            if (dbProdukt == null)
+            {
+                return new DienstAntwort<Produkt>
+                {
+                    Erfolg = false,
+                    Nachricht = "Das Produkt wurde nicht gefunden"
+                };
+            }
+            dbProdukt.Title = produkt.Title;
+            dbProdukt.Bezeichnung = produkt.Bezeichnung;
+            dbProdukt.BildUrl = produkt.BildUrl;
+            dbProdukt.KategorieID = produkt.KategorieID;
+            dbProdukt.Sichtbar = produkt.Sichtbar;
+            foreach(var variante in produkt.ProduktVarianten)
+            {
+                var dbVariante = await _kontext.ProduktVarianten.SingleOrDefaultAsync(v => v.ProduktID == variante.ProduktID
+                && v.ProduktArtID == variante.ProduktArtID);
+                if(dbVariante==null)
+                {
+                    variante.ProduktArt = null;
+                    _kontext.ProduktVarianten.Add(variante);
+                }
+                else
+                {
+                    dbVariante.ProduktArtID = variante.ProduktArtID;
+                    dbVariante.Preis = variante.Preis;
+                    dbVariante.OriginalPreis = variante.OriginalPreis;
+                    dbVariante.Sichtbar = variante.Sichtbar;
+                    dbVariante.Gelöscht = variante.Gelöscht;
+
+                }
+            }
+            await _kontext.SaveChangesAsync();
+            return new DienstAntwort<Produkt>
+            {
+                Daten = produkt
+            };
+        }
+
+        public async Task<DienstAntwort<Produkt>> ErstelleProduktAsync(Produkt produkt)
+        {
+            foreach(var variante in produkt.ProduktVarianten)
+            {
+                variante.ProduktArt = null;
+            }
+            _kontext.Produkte.Add(produkt);
+            await _kontext.SaveChangesAsync();
+            return new DienstAntwort<Produkt>
+            {
+                Daten = produkt
+            };
         }
 
         public async Task<DienstAntwort<List<string>>> GeheAnregungenZurProduktSucheAsync(string suchText)
@@ -106,6 +164,26 @@
                 .Include(p => p.ProduktVarianten.Where(v => v.Sichtbar && !v.Gelöscht)).ToListAsync()
             };
             return antwort;
+        }
+
+        public async Task<DienstAntwort<bool>> LöscheProduktAsync(int produktID)
+        {
+            var dbProdukt = await _kontext.Produkte.FindAsync(produktID);
+            if(dbProdukt==null)
+            {
+                return new DienstAntwort<bool>
+                {
+                    Erfolg = false,
+                    Daten = false,
+                    Nachricht = "Das Produkt wurde nicht gefunden"
+                };
+            }
+            dbProdukt.Gelöscht = true;
+            await _kontext.SaveChangesAsync();
+            return new DienstAntwort<bool>
+            {
+                Daten = true
+            };
         }
 
         public async Task<DienstAntwort<ResultatProduktSuche>> SucheProdukteAsync(string suchText, int seite)

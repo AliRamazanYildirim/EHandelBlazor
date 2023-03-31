@@ -9,6 +9,11 @@
         Task<DienstAntwort<List<string>>> GeheAnregungenZurProduktSucheAsync(string suchText);
         Task<DienstAntwort<List<Produkt>>> GeheZurVorgestellteProdukteAsync();
         Task<DienstAntwort<List<Produkt>>> GeheZurAdminProdukteAsync();
+        Task<DienstAntwort<Produkt>> ErstelleProduktAsync(Produkt produkt);
+        Task<DienstAntwort<Produkt>> AktualisiereProduktAsync(Produkt produkt);
+        Task<DienstAntwort<bool>> LöscheProduktAsync(int produktID);
+
+
 
     }
 }
