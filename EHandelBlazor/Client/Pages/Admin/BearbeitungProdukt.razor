@@ -187,7 +187,7 @@ else
 
     async void LöscheProdukt()
     {
-        bool bestätigt = await JSRuntime.InvokeAsync<bool>("confirm",
+        bool bestätigt = await JSRuntime.InvokeAsync<bool>("bestätigten",
             $"Wollen Sie '{produkt.Title}' wirklich löschen?");
         if (bestätigt)
         {
