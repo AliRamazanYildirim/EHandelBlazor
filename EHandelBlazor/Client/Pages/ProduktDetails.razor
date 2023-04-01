@@ -16,7 +16,7 @@ else
         <div class="media-body">
             <h2 class="mb-0">@produkt.Title</h2>
             <p>@produkt.Bezeichnung</p>
-            @if(produkt.ProduktVarianten != null && produkt.ProduktVarianten.Count > 1)
+            @if(produkt.ProduktVarianten != null && produkt.ProduktVarianten.Count > 0)
             {
                 <div class="mb-3">
                     <select class="from-select" @bind="aktuelleArtID">
