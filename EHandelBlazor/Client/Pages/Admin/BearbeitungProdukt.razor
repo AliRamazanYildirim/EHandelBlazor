@@ -181,20 +181,18 @@ else
         {
             produkt.IstNeu = false;
             produkt = await ProduktDienst.AktualisiereProduktAsync(produkt);
-            NavigationManager.NavigateTo($"admin/produkte/");
+            NavigationManager.NavigateTo($"admin/produkte");
         }
     }
 
     async void LöscheProdukt()
     {
-        bool bestätigt = await JSRuntime.InvokeAsync<bool>("bestätigt",
+        bool beschtätigt = await JSRuntime.InvokeAsync<bool>("confirm",
             $"Wollen Sie '{produkt.Title}' wirklich löschen?");
-        if (bestätigt)
+        if (beschtätigt)
         {
             await ProduktDienst.LöscheProduktAsync(produkt);
             NavigationManager.NavigateTo("admin/produkte");
         }
     }
-
-  
 }
