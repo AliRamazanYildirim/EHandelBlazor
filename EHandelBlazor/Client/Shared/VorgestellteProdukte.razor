@@ -16,7 +16,14 @@ else
                 <div class="vorgestelltes-produkt">
                     <div>
                         <a href="produkt/@produkt.ID">
+                            @if (!string.IsNullOrEmpty(produkt.BildUrl))
+                            {
                                 <img src="@produkt.BildUrl">
+                            }
+                            else if (produkt.Bilder.Count > 0)
+                            {
+                                <img src="@produkt.Bilder[0].Daten" />
+                            }
                         </a>
                     </div>
                     <h4><a href="produkt/@produkt.ID">@produkt.Title</a></h4>

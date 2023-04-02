@@ -15,7 +15,8 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
 
         public async Task<DienstAntwort<Produkt>> AktualisiereProduktAsync(Produkt produkt)
         {
-            var dbProdukt = await _kontext.Produkte.FindAsync(produkt.ID);
+            var dbProdukt = await _kontext.Produkte.Include(p => p.Bilder)
+                .FirstOrDefaultAsync(p => p.ID == produkt.ID);
             if (dbProdukt == null)
             {
                 return new DienstAntwort<Produkt>
@@ -31,6 +32,10 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
             dbProdukt.Sichtbar = produkt.Sichtbar;
             dbProdukt.Vorgestellt = produkt.Vorgestellt;
 
+            var produktBilder = dbProdukt.Bilder;
+            _kontext.Bilder.RemoveRange(produktBilder);
+
+            dbProdukt.Bilder = produkt.Bilder;
             foreach(var variante in produkt.ProduktVarianten)
             {
                 var dbVariante = await _kontext.ProduktVarianten.SingleOrDefaultAsync(v => v.ProduktID == variante.ProduktID
@@ -104,13 +109,13 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
             if(_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
             {
                 produkt = await _kontext.Produkte.Include(p => p.ProduktVarianten.Where(pv => !pv.Gelöscht))
-                .ThenInclude(v => v.ProduktArt)
+                .ThenInclude(v => v.ProduktArt).Include(p => p.Bilder)
                 .FirstOrDefaultAsync(p => p.ID == produktID && !p.Gelöscht);
             }
             else
             {
                 produkt = await _kontext.Produkte.Include(p => p.ProduktVarianten.Where(pv => pv.Sichtbar && !pv.Gelöscht))
-                .ThenInclude(v => v.ProduktArt)
+                .ThenInclude(v => v.ProduktArt).Include(p => p.Bilder)
                 .FirstOrDefaultAsync(p => p.ID == produktID && !p.Gelöscht && p.Sichtbar);
             }
             
@@ -132,7 +137,7 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
             {
                 Daten = await _kontext.Produkte.Where(p => !p.Gelöscht)
                .Include(p => p.ProduktVarianten.Where(v => !v.Gelöscht))
-               .ThenInclude(v => v.ProduktArt).ToListAsync()
+               .ThenInclude(v => v.ProduktArt).Include(p => p.Bilder).ToListAsync()
             };
             return antwort;
         }
@@ -142,7 +147,8 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
             var antwort = new DienstAntwort<List<Produkt>>
             {
                 Daten = await _kontext.Produkte.Where(p => p.Sichtbar && !p.Gelöscht)
-                .Include(p => p.ProduktVarianten.Where(v => v.Sichtbar && !v.Gelöscht)).ToListAsync()
+                .Include(p => p.ProduktVarianten.Where(v => v.Sichtbar && !v.Gelöscht)).Include(p => p.Bilder)
+                .ToListAsync()
             };
             return antwort;
         }
@@ -153,7 +159,7 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
             {
                 Daten = await _kontext.Produkte.Where(p => p.Kategorie.Url.ToLower().Equals(kategorieUrl.ToLower())
                 && p.Sichtbar && !p.Gelöscht).Include(p => p.ProduktVarianten.Where(v => v.Sichtbar && !v.Gelöscht))
-                .ToListAsync()
+                .Include(p => p.Bilder).ToListAsync()
             };
             return antwort;
         }
@@ -163,7 +169,8 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
             var antwort = new DienstAntwort<List<Produkt>>
             {
                 Daten = await _kontext.Produkte.Where(p => p.Vorgestellt && p.Sichtbar && !p.Gelöscht)
-                .Include(p => p.ProduktVarianten.Where(v => v.Sichtbar && !v.Gelöscht)).ToListAsync()
+                .Include(p => p.ProduktVarianten.Where(v => v.Sichtbar && !v.Gelöscht)).Include(p => p.Bilder)
+                .ToListAsync()
             };
             return antwort;
         }
@@ -199,7 +206,7 @@ namespace EHandelBlazor.Server.Dienste.ProduktDienst
             var seitenZahl = Math.Ceiling((await FindeProdukteNachSuchTextAsync(suchText)).Count / seiteResultate);
             var produkte = await _kontext.Produkte.Where(p => p.Title.ToLower().Contains(suchText.ToLower()) ||
                             p.Bezeichnung.ToLower().Contains(suchText.ToLower()) && p.Sichtbar && !p.Gelöscht)
-                            .Include(p => p.ProduktVarianten).Skip((seite - 1) * (int)seiteResultate)
+                            .Include(p => p.ProduktVarianten).Include(p => p.Bilder).Skip((seite - 1) * (int)seiteResultate)
                             .Take((int)seiteResultate).ToListAsync();
             var antwort = new DienstAntwort<ResultatProduktSuche>
             {

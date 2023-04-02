@@ -15,12 +15,14 @@ global using Blazored.LocalStorage;
 global using EHandelBlazor.Shared.Modelle;
 global using Microsoft.AspNetCore.Components;
 global using EHandelBlazor.Shared.Düoe;
+using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddMudServices();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<IProduktDienst, ProduktDienst>();
 builder.Services.AddScoped<IKategorieDienst, KategorieDienst>();

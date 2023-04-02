@@ -26,7 +26,6 @@ else
         <div class="mb-0">
             <label for="title">Title</label>
             <InputText id="title" @bind-Value="produkt.Title" class="form-control"></InputText>
-            <ValidationMessage For="@(()=>produkt.Title)"></ValidationMessage>
 
         </div>
         <div class="mb-0">
@@ -35,7 +34,34 @@ else
             <ValidationMessage For="@(()=>produkt.BildUrl)"></ValidationMessage>
 
         </div>
-        
+        <div class="mb-0" style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: center;">
+            @if (!string.IsNullOrEmpty(produkt.BildUrl))
+            {
+                <img src="@produkt.BildUrl" />
+            }
+            else
+            {
+                foreach (var bild in produkt.Bilder)
+                {
+                    <MudCard Class="ma-2">
+                        <MudCardContent>
+                            <MudImage Src="@bild.Daten" />
+                        </MudCardContent>
+                        <MudCardActions Style="justify-content: center;">
+                            <MudButton Variant="Variant.Filled"
+                           Color="Color.Error"
+                           OnClick="@(() => EntferneBild(bild.ID))">
+                                Entferne
+                            </MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                }
+            }
+        </div>
+        <div class="mb-0">
+            <label for="bilder">Bilder</label>
+            <InputFile id="bilder" OnChange="BeiDateiÄnderung" multiple class="form-control"></InputFile>
+        </div>
         <div class="mb-0">
             <label for="bezeichnung">Bezeichnung</label>
             <InputTextArea id="bezeichnung" @bind-Value="produkt.Bezeichnung" class="form-control"></InputTextArea>
@@ -193,6 +219,26 @@ else
         {
             await ProduktDienst.LöscheProduktAsync(produkt);
             NavigationManager.NavigateTo("admin/produkte");
+        }
+    }
+    void EntferneBild(int ID)
+    {
+        var bild = produkt.Bilder.FirstOrDefault(i => i.ID == ID);
+        if (bild != null)
+        {
+            produkt.Bilder.Remove(bild);
+        }
+    }
+    async Task BeiDateiÄnderung(InputFileChangeEventArgs e)
+    {
+        var format = "bild/png";
+        foreach (var bild in e.GetMultipleFiles(int.MaxValue))
+        {
+            var verkleinertesBild = await bild.RequestImageFileAsync(format, 200, 200);
+            var puffer = new byte[verkleinertesBild.Size];
+            await verkleinertesBild.OpenReadStream().ReadAsync(puffer);
+            var bildDaten = $"data:{format};base64,{Convert.ToBase64String(puffer)}";
+            produkt.Bilder.Add(new Bild { Daten = bildDaten });
         }
     }
 }

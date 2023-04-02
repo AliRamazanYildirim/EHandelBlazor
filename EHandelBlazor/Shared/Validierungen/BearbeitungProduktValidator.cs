@@ -13,7 +13,6 @@ namespace EHandelBlazor.Shared.Validierungen
         public BearbeitungProduktValidator()
         {
             RuleFor(p => p.Title).NotEmpty().WithMessage("Title ist erforderlich.");
-            RuleFor(p => p.BildUrl).NotEmpty().WithMessage("Bild Url ist erforderlich.");
             RuleFor(p => p.Bezeichnung).NotEmpty().WithMessage("Bezeichnung Url ist erforderlich.");
         }
     }
