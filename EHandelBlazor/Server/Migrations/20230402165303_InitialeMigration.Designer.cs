@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EHandelBlazor.Server.Migrations
 {
     [DbContext(typeof(DatenKontext))]
-    [Migration("20230323113045_NeueMigration")]
-    partial class NeueMigration
+    [Migration("20230402165303_InitialeMigration")]
+    partial class InitialeMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -95,6 +95,10 @@ namespace EHandelBlazor.Server.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("Rolle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ID");
 
                     b.ToTable("Benutzer");
@@ -150,6 +154,28 @@ namespace EHandelBlazor.Server.Migrations
                     b.ToTable("BestellungsArtikel");
                 });
 
+            modelBuilder.Entity("EHandelBlazor.Shared.Modelle.Bild", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Daten")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProduktID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProduktID");
+
+                    b.ToTable("Bilder");
+                });
+
             modelBuilder.Entity("EHandelBlazor.Shared.Modelle.Kategorie", b =>
                 {
                     b.Property<int>("ID")
@@ -158,9 +184,15 @@ namespace EHandelBlazor.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<bool>("Gelöscht")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Sichtbar")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -174,19 +206,25 @@ namespace EHandelBlazor.Server.Migrations
                         new
                         {
                             ID = 1,
+                            Gelöscht = false,
                             Name = "Bücher",
+                            Sichtbar = true,
                             Url = "bücher"
                         },
                         new
                         {
                             ID = 2,
+                            Gelöscht = false,
                             Name = "Filme",
+                            Sichtbar = true,
                             Url = "filme"
                         },
                         new
                         {
                             ID = 3,
+                            Gelöscht = false,
                             Name = "Videospiele",
+                            Sichtbar = true,
                             Url = "videospiele"
                         });
                 });
@@ -207,8 +245,14 @@ namespace EHandelBlazor.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Gelöscht")
+                        .HasColumnType("bit");
+
                     b.Property<int>("KategorieID")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Sichtbar")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -229,7 +273,9 @@ namespace EHandelBlazor.Server.Migrations
                             ID = 1,
                             Bezeichnung = "Aspekte orientiert sich an den Niveaustufen des Europäischen Referenzrahmens und bereitet in den Bänden 2 und 3 auch auf die Prüfungen im Niveau B2 und C1 vor. Das Lehrwerk richtet sich an (junge) Erwachsene. Jeder Teilband der 6-bändigen Ausgabe enthält jeweils 5 Kapitel.",
                             BildUrl = "https://res.cloudinary.com/pim-red/image/upload/q_auto,f_auto,w_360/v1571856187/klett/cover/9783126060080.jpg",
+                            Gelöscht = false,
                             KategorieID = 1,
+                            Sichtbar = true,
                             Title = "Deutsch als Fremdsprache (DaF) Aspekte 1 (B1+)",
                             Vorgestellt = true
                         },
@@ -238,7 +284,9 @@ namespace EHandelBlazor.Server.Migrations
                             ID = 2,
                             Bezeichnung = "Aspekte orientiert sich an den Niveaustufen des Europäischen Referenzrahmens und bereitet in den Bänden 2 und 3 auch auf die Prüfungen im Niveau B2 und C1 vor. Das Lehrwerk richtet sich an (junge) Erwachsene.",
                             BildUrl = "https://res.cloudinary.com/pim-red/image/upload/q_auto,f_auto,w_360/v1571856201/klett/cover/9783126060127.jpg",
+                            Gelöscht = false,
                             KategorieID = 1,
+                            Sichtbar = true,
                             Title = "Deutsch als Fremdsprache (DaF) Aspekte 2 (B2)",
                             Vorgestellt = false
                         },
@@ -247,7 +295,9 @@ namespace EHandelBlazor.Server.Migrations
                             ID = 3,
                             Bezeichnung = "Aspekte orientiert sich an den Niveaustufen des Europäischen Referenzrahmens und bereitet in den Bänden 2 und 3 auch auf die Prüfungen im Niveau B2 und C1 vor. Das Lehrwerk richtet sich an (junge) Erwachsene.",
                             BildUrl = "https://res.cloudinary.com/pim-red/image/upload/q_auto,f_auto,w_360/v1571856242/klett/cover/9783126060233.jpg",
+                            Gelöscht = false,
                             KategorieID = 1,
+                            Sichtbar = true,
                             Title = "Deutsch als Fremdsprache (DaF) Aspekte 3 (C1)",
                             Vorgestellt = false
                         },
@@ -256,7 +306,9 @@ namespace EHandelBlazor.Server.Migrations
                             ID = 4,
                             Bezeichnung = "Im Jahr 1947 wird der junge Mathematiker Josh Nash (Russell Crowe) an der Princeton University angenommen. Dies wird ihm durch das angesehene Carnegie-Stipendium ermöglicht, das jedoch auch seine Pflichten mit sich bringt. So ist Nash dazu verpflichtet Artikel zu veröffentlichen. Diesem enormen Druck zum Trotz, will er unbedingt eigene Ideen entwickeln, jedoch fehlt ihm dazu die nötige Inspiration. Einen Geistesblitz hat der Außenseiter erst, als er mit einigen anderen Studenten nachts diskutiert, welche Methode am besten geeignet ist, um die Frauen an der Bar erfolgreich anzusprechen. Während sein Kommilitone meint, jeder solle für sich selbst vorgehen, ist Nash davon überzeugt, dass Zusammenarbeit die höheren Erfolgsaussichten mit sich bringen würde. Basierend auf dieser Grundlage entwickelt er einen zentralen Begriff der Spieltheorie, was ihn auf einen Schlag berühmt macht und eine Stelle am MIT verschafft. Dort nimmt der geheimnisvolle William Parcher (Ed Harris) Kontakt zu ihm auf. Parcher ist Agent des amerikanischen Verteidigungsministeriums, der Nashs Hilfe braucht, um eine mögliche sowjetische Verschwörung aufzudecken. Denn Nash kann zum Erstaunen von anderen Kryptologen die Codes entschlüsseln, die der Feind bei seiner Kommunikation verwendet. Da ihn seine Arbeit im MIT ohnehin langweilt, stürzt sich der Mathematiker in seine neue Aufgabe und sucht in Zeitungen nach Mustern. Zunehmend verfällt Nash jedoch in eine Obsession, die ihn in Gefahr bringt und ein weitreichendes Geheimnis offenbart.",
                             BildUrl = "https://i0.wp.com/jatko.me/wp-content/uploads/2019/06/mind.jpg?w=1280&ssl=1",
+                            Gelöscht = false,
                             KategorieID = 2,
+                            Sichtbar = true,
                             Title = "A beautiful Mind - Genie und Wahnsinn",
                             Vorgestellt = true
                         },
@@ -265,7 +317,9 @@ namespace EHandelBlazor.Server.Migrations
                             ID = 5,
                             Bezeichnung = "FBI-Agent Nelville Flynn (Samuel L. Jackson) glaubt an einen Routineauftrag, als er mit einem wichtigen Zeugen auf Hawaii in eine Linienmaschine steigt, um den Herren zur Anhörung im Rahmen eines Mafiaprozesses nach Los Angeles zu überführen. Leider ging auch ein unbekannter Killer mit an Bord, und der setzt nun, knapp 10.000 Meter über dem Meeresspiegel, zur geringen Begeisterung von Cop, Crew und Passagieren ein paar hundert tödliche Giftschlangen im Flieger frei.",
                             BildUrl = "https://images-na.ssl-images-amazon.com/images/S/pv-target-images/b000fa8918b7fa1e1b1df1c161f60b224857c8294bdc10d088b26f716167db60._RI_V_TTW_.jpg",
+                            Gelöscht = false,
                             KategorieID = 2,
+                            Sichtbar = true,
                             Title = "Léon: The Professional - Der Profi",
                             Vorgestellt = false
                         },
@@ -274,7 +328,9 @@ namespace EHandelBlazor.Server.Migrations
                             ID = 6,
                             Bezeichnung = "Viele Jahre in der Zukunft: Grey (Logan Marshall-Green) und seine Frau Asha (Melanie Vallejo) haben erst einen Autounfall und werden dann Opfer eines Gewaltverbrechens, bei dem sie stirbt und er nach einem Schuss in die Wirbelsäule in den Rollstuhl kommt. Grey denkt, dass es das nun war für ihn. Dann aber bekommt er von seinem Klienten Eron Keen (Harrison Gilbertson) das Angebot, ihm den Computerchip STEN einzupflanzen, der die Medizin revolutionieren könnte. Denn nach der Operation kann sich Grey wieder so bewegen wie vorher! Doch er hat nun nicht nur einen digitalen Unterstützer im Körper, sondern eine künstliche Superintelligenz, die auf Wunsch die komplette Kontrolle des Körpers übernimmt. Grey willigt ein, damit so die Mörder seiner Frau gefunden werden können und blutige Rache genommen wird…",
                             BildUrl = "https://m.media-amazon.com/images/M/MV5BZGRhMTE0MzgtMjZlZS00MTUxLTljMzUtYTFkZWIwZWE1MTg4XkEyXkFqcGdeQXVyMTQyMTMwOTk0._V1_.jpg",
+                            Gelöscht = false,
                             KategorieID = 2,
+                            Sichtbar = true,
                             Title = "Upgrade",
                             Vorgestellt = false
                         },
@@ -283,7 +339,9 @@ namespace EHandelBlazor.Server.Migrations
                             ID = 7,
                             Bezeichnung = "Chivalry 2 ist ein Multiplayer-First-Person-Slasher, der von den epischen Schlachten bekannter Mittelalter-Filme inspiriert wurde. Spieler erleben zahlreiche ikonische Momente - von aneinander klirrenden Schwertern zu wahren Stürmen aus flammenden Pfeilen, Belagerungen riesiger Festungen und vieles mehr. Sie dominieren die Weiten der Schlachtfelder, Katapulte bringen die Erde zum Beben, während Schlösser belagert, Dörfer in Brand gesteckt und üble Bauernheere ausgemerzt werden, bei der Rückkehr der \"Team Objective\" Maps.",
                             BildUrl = "https://chivalry2.com/wp-content/uploads/2021/07/Chivalry2_Galencourt_EGS_1920x1080-3-1536x864.jpg",
+                            Gelöscht = false,
                             KategorieID = 3,
+                            Sichtbar = true,
                             Title = "Chivalry 2",
                             Vorgestellt = true
                         },
@@ -292,7 +350,9 @@ namespace EHandelBlazor.Server.Migrations
                             ID = 8,
                             Bezeichnung = "EA SPORTS™ FIFA 23 präsentiert The World's Game. Die HyperMotion2-Technologie sorgt für noch größeren Gameplay-Realismus, Post-Launch-Updates bringen den FIFA World Cup™ der Männer und der Frauen ins Spiel, es gibt neue Frauen-Vereinsmannschaften, Cross-Play-Features* und mehr. Erlebe absolute Authentizität mit über 19.000 Profis, 700+ Teams, 100 Stadien und über 30 Ligen in FIFA 23.",
                             BildUrl = "https://image.api.playstation.com/vulcan/ap/rnd/202207/0515/BOwvC0Q9dfw6QhGvX9dd13Sr.jpg",
+                            Gelöscht = false,
                             KategorieID = 3,
+                            Sichtbar = true,
                             Title = "Fifa 23",
                             Vorgestellt = false
                         },
@@ -301,7 +361,9 @@ namespace EHandelBlazor.Server.Migrations
                             ID = 9,
                             Bezeichnung = "Man spielt eine Figur, mit der man in dem fiktiven Land Calradia eine Armee aus Soldaten unterschiedlicher Waffengattungen zusammenstellen kann. Mit dieser Armee kämpft man für eine beliebige Fraktion gegen verschiedene andere Fraktionen innerhalb der Spielwelt.",
                             BildUrl = "https://www.donanimhaber.com/images/images/haber/152008/src_340x191mount-blade-ii-bannerlord-un-tam-surum-cikis-tarihi-aciklandi.jpg",
+                            Gelöscht = false,
                             KategorieID = 3,
+                            Sichtbar = true,
                             Title = "Mount & Blade II: Bannerlord",
                             Vorgestellt = false
                         });
@@ -384,6 +446,9 @@ namespace EHandelBlazor.Server.Migrations
                     b.Property<int>("ProduktArtID")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Gelöscht")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("OriginalPreis")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -391,6 +456,9 @@ namespace EHandelBlazor.Server.Migrations
                     b.Property<decimal>("Preis")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("Sichtbar")
+                        .HasColumnType("bit");
 
                     b.HasKey("ProduktID", "ProduktArtID");
 
@@ -403,64 +471,82 @@ namespace EHandelBlazor.Server.Migrations
                         {
                             ProduktID = 1,
                             ProduktArtID = 2,
+                            Gelöscht = false,
                             OriginalPreis = 28.99m,
-                            Preis = 9.99m
+                            Preis = 9.99m,
+                            Sichtbar = true
                         },
                         new
                         {
                             ProduktID = 2,
                             ProduktArtID = 3,
+                            Gelöscht = false,
                             OriginalPreis = 29.99m,
-                            Preis = 19.99m
+                            Preis = 19.99m,
+                            Sichtbar = true
                         },
                         new
                         {
                             ProduktID = 3,
                             ProduktArtID = 1,
+                            Gelöscht = false,
                             OriginalPreis = 14.99m,
-                            Preis = 7.99m
+                            Preis = 7.99m,
+                            Sichtbar = true
                         },
                         new
                         {
                             ProduktID = 4,
                             ProduktArtID = 6,
+                            Gelöscht = false,
                             OriginalPreis = 29.99m,
-                            Preis = 19.99m
+                            Preis = 19.99m,
+                            Sichtbar = true
                         },
                         new
                         {
                             ProduktID = 5,
                             ProduktArtID = 6,
+                            Gelöscht = false,
                             OriginalPreis = 59.99m,
-                            Preis = 49.99m
+                            Preis = 49.99m,
+                            Sichtbar = true
                         },
                         new
                         {
                             ProduktID = 6,
                             ProduktArtID = 5,
+                            Gelöscht = false,
                             OriginalPreis = 24.99m,
-                            Preis = 9.99m
+                            Preis = 9.99m,
+                            Sichtbar = true
                         },
                         new
                         {
                             ProduktID = 7,
                             ProduktArtID = 9,
+                            Gelöscht = false,
                             OriginalPreis = 24.99m,
-                            Preis = 9.99m
+                            Preis = 9.99m,
+                            Sichtbar = true
                         },
                         new
                         {
                             ProduktID = 8,
                             ProduktArtID = 10,
+                            Gelöscht = false,
                             OriginalPreis = 70.99m,
-                            Preis = 39.99m
+                            Preis = 39.99m,
+                            Sichtbar = true
                         },
                         new
                         {
                             ProduktID = 9,
                             ProduktArtID = 10,
+                            Gelöscht = false,
                             OriginalPreis = 85.99m,
-                            Preis = 49.99m
+                            Preis = 49.99m,
+                            Sichtbar = true
                         });
                 });
 
@@ -519,6 +605,13 @@ namespace EHandelBlazor.Server.Migrations
                     b.Navigation("ProduktArt");
                 });
 
+            modelBuilder.Entity("EHandelBlazor.Shared.Modelle.Bild", b =>
+                {
+                    b.HasOne("EHandelBlazor.Shared.Modelle.Produkt", null)
+                        .WithMany("Bilder")
+                        .HasForeignKey("ProduktID");
+                });
+
             modelBuilder.Entity("EHandelBlazor.Shared.Modelle.Produkt", b =>
                 {
                     b.HasOne("EHandelBlazor.Shared.Modelle.Kategorie", "Kategorie")
@@ -562,6 +655,8 @@ namespace EHandelBlazor.Server.Migrations
 
             modelBuilder.Entity("EHandelBlazor.Shared.Modelle.Produkt", b =>
                 {
+                    b.Navigation("Bilder");
+
                     b.Navigation("ProduktVarianten");
                 });
 #pragma warning restore 612, 618
