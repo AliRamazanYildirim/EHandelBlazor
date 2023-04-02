@@ -11,6 +11,8 @@
         public DbSet<Bestellung> Bestellungen { get; set; }
         public DbSet<BestellungsArtikel> BestellungsArtikel { get; set; }
         public DbSet<Adresse> Adressen{ get; set; }
+        public DbSet<Bild> Bilder { get; set; }
+
 
         public DatenKontext(DbContextOptions<DatenKontext> options):base(options)
         {
