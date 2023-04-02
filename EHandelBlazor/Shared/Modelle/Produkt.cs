@@ -6,6 +6,7 @@
         public string Title { get; set; } = string.Empty;
         public string Bezeichnung { get; set; } = string.Empty;
         public string BildUrl { get; set; } = string.Empty;
+        public List<Bild> Bilder { get; set; } = new List<Bild>();
         public int KategorieID { get; set; }
         public bool Vorgestellt { get; set; } = false;
         public Kategorie? Kategorie { get; set; }
