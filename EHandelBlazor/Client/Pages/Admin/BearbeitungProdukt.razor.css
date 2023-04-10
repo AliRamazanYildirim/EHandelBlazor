@@ -23,4 +23,8 @@
 
 .col-sichtbar {
     text-align: center;
+
+}
+.form-check-input:checked {
+    background-color: blue !important;
 }

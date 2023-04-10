@@ -94,10 +94,10 @@ else
             <InputNumber @bind-Value="variante.OriginalPreis" class="form-control" disabled="@variante.Gelöscht"></InputNumber>
         </div>
         <div class="col col-sichtbar">
-            <InputCheckbox @bind-Value="variante.Sichtbar" style="transform:scale(1.5,1.5);" disabled="@variante.Gelöscht"></InputCheckbox>
+            <InputCheckbox @bind-Value="variante.Sichtbar" style="transform:scale(1.5,1.5);" disabled="@variante.Gelöscht" class="form-check-input"></InputCheckbox>
         </div>
         <div class="col">
-                    <button type="button" class="btn btn-success" disabled="@variante.Gelöscht" @onclick="@(() => EntferneVariante(variante.ProduktArtID))">
+                    <button type="button" class="btn btn-danger" disabled="@variante.Gelöscht" @onclick="@(() => EntferneVariante(variante.ProduktArtID))">
                 <i class="oi oi-trash"></i>
             </button>
         </div>
